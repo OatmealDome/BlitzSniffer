@@ -22,4 +22,4 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Publish
-      run: dotnet publish -r win-x64 -p:PublishSingleFile=true --self-contained true -c Release
+      run: dotnet publish BlitzSniffer -r win-x64 -p:PublishSingleFile=true --self-contained true -c Release
