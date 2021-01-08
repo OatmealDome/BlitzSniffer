@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-lates
 
     steps:
     - uses: actions/checkout@v2
@@ -19,5 +19,5 @@ jobs:
         dotnet-version: 3.1.301
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
+    - name: Publish
+      run: dotnet publish -r win-x64 -p:PublishSingleFile=true --self-contained true -c Release
