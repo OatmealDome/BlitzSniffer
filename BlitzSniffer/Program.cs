@@ -5,15 +5,13 @@ using BlitzSniffer.Receiver;
 using BlitzSniffer.Resources.Source;
 using BlitzSniffer.Searcher;
 using BlitzSniffer.Tracker;
+using BlitzSniffer.Util;
 using BlitzSniffer.WebSocket;
 using LibHac;
 using NintendoNetcode.Pia;
 using Serilog;
 using Serilog.Core;
 using SharpPcap;
-using SKM.V3;
-using SKM.V3.Methods;
-using SKM.V3.Models;
 using System;
 using System.IO;
 using System.Text;
@@ -23,9 +21,6 @@ namespace BlitzSniffer
     class Program
     {
         private static readonly string LOG_FORMAT = "[{Timestamp:HH:mm:ss} {Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
-
-        private static string CRYPTOLENS_PUBLIC_KEY = "<RSAKeyValue><Modulus>kXe0NP7Dco5g85KOziWQT+oK21VkKwp+4XeR6GOTf46u2F3UwdFK3UYA1wXxIobbWoCpvX+7Yq/gGlV03IEqjzfxePwMXKd31EIFT7fez/hKz29YRD6A9pIJwqnHfJo8Xfje/6vxj83nvlvLXLgLutJs4tKK+hM43EAKy2NEs3mF/qeu88tPX3MMkrqrN0N2/I2tPnUgiMjV/pZ02wWhZSFnsfxhpcmwUI0mTYPcYa8317oG2BoXtNiS7wpurHygZPPRpcqc/BJjR7117N3IY7GIBa7qsBhcyzjr86m+Wt2s65kt3A5vI9jAjQ7cTIPIhzvWJCoeVOwTdjJSpjZsxw==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
-        private static string CRYPTOLENS_AUTH_TOKEN = "WyIyNTg2NDgiLCJueitsRVVmQWFpVWIwVHM5RzdtTjJkNjkxekxHR0czb2ROU2phNEVyIl0=";
 
         /// <summary>
         /// Sniffs Splatoon 2 LAN sessions.
@@ -134,15 +129,7 @@ namespace BlitzSniffer
             localLogContext.Information("Copyright © 2020 - 2021 OatmealDome");
 
 #if !DEBUG
-            KeyInfoResult keyResult = Key.Activate(token: CRYPTOLENS_AUTH_TOKEN, parameters: new ActivateModel()
-            {
-                Key = SnifferConfig.Instance.Key,
-                ProductId = 8988,
-                Sign = true,
-                MachineCode = Helpers.GetMachineCodePI()
-            });
-
-            if (keyResult == null || keyResult.Result == ResultType.Error || !keyResult.LicenseKey.HasValidSignature(CRYPTOLENS_PUBLIC_KEY).IsValid())
+            if (!LicenseTools.Instance.LoadAndVerifyLicense())
             {
                 localLogContext.Error("Program validation failed. Please contact OatmealDome.");
                 return;
