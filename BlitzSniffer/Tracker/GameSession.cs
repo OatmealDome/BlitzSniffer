@@ -11,7 +11,9 @@ using BlitzSniffer.Tracker.Versus.VArea;
 using BlitzSniffer.Tracker.Versus.VClam;
 using BlitzSniffer.Tracker.Versus.VGoal;
 using BlitzSniffer.Tracker.Versus.VLift;
+using BlitzSniffer.Util;
 using Nintendo.Sead;
+using SKM.V3;
 using Syroot.BinaryData;
 using System;
 using System.IO;
@@ -278,6 +280,14 @@ namespace BlitzSniffer.Tracker
 
                 if (eventType == 0) // Synchronize game start using clone clock
                 {
+#if !DEBUG
+                    LicenseKey licenseKey = LicenseTools.Instance.GetLoadedLicense();
+                    if (licenseKey == null || !licenseKey.HasValidSignature(LicenseTools.CRYPTOLENS_PUBLIC_KEY).IsValid())
+                    {
+                        return;
+                    }
+#endif
+
                     StartClock = reader.ReadUInt32();
                     // int mapId = reader.ReadInt32();
                     // uint unknown = reader.ReadUInt32();
