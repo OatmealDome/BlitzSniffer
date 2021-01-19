@@ -12,7 +12,7 @@ namespace BlitzSniffer.Tracker.Player
     public class PlayerOffenseTracker : IDisposable
     {
         private static readonly ILogger LogContext = Log.ForContext(Constants.SourceContextPropertyName, "PlayerOffenseTracker");
-        private static readonly uint FRAME_DELAY = 10;
+        private static readonly uint FRAME_DELAY = 15;
 
         private readonly ConcurrentDictionary<uint, PlayerDeathEvent> WaitingDeathEvents;
 
