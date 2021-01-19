@@ -289,7 +289,7 @@ namespace BlitzSniffer.Tracker
 
         public void HandleCloneChanged(object sender, CloneChangedEventArgs args)
         {
-            if (!IsSetup)
+            if (!IsSetup || !ClockReady)
             {
                 return;
             }
