@@ -123,6 +123,12 @@ namespace BlitzSniffer
                     }
                     
                     break;
+                case PlayerDisconnectEvent disconnectEvent:
+                    Player disconnectedPlayer = GameSession.Instance.PlayerTracker.GetPlayer(disconnectEvent.PlayerIdx);
+
+                    LogContext.Warning("PlayerDisconnect: {Name} disconnected", disconnectedPlayer.Name);
+
+                    break;
                 case PaintFinishEvent paintFinishEvent:
                     LogContext.Information("PaintFinish: game finish, {AlphaScore}p - {BravoScore}p", paintFinishEvent.AlphaPoints, paintFinishEvent.BravoPoints);
 
