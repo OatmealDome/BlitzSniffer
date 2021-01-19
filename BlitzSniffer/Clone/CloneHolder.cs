@@ -26,12 +26,6 @@ namespace BlitzSniffer.Clone
             set;
         }
 
-        public uint Clock
-        {
-            get;
-            private set;
-        }
-
         public delegate void CloneChangedEventHandler(object sender, CloneChangedEventArgs args);
         public event CloneChangedEventHandler CloneChanged;
 
@@ -94,12 +88,7 @@ namespace BlitzSniffer.Clone
 
         public void UpdateCloneClock(uint clock)
         {
-            if (Clock < clock)
-            {
-                Clock = clock;
-
-                ClockChanged(this, new ClockChangedEventArgs(clock));
-            }
+            ClockChanged(this, new ClockChangedEventArgs(clock));
         }
 
     }
