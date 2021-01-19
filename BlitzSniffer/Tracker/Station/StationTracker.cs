@@ -13,10 +13,10 @@ namespace BlitzSniffer.Tracker.Station
     {
         private readonly Dictionary<ulong, Station> Stations;
 
-        private byte LastJointSeqState
+        public byte LastJointSeqState
         {
             get;
-            set;
+            private set;
         }
 
         private byte LastMasterSeqState

@@ -136,11 +136,17 @@ namespace BlitzSniffer.Tracker.Player
                 return;
             }
 
+            StationTracker tracker = GameSession.Instance.StationTracker;
+
+            if (tracker.LastJointSeqState != 7)
+            {
+                return;
+            }
+
             Player player = Players[playerId];
 
             if (!player.IsActive && !player.IsDisconnected)
             {
-                StationTracker tracker = GameSession.Instance.StationTracker;
                 
                 Station.Station station = tracker.GetStationForSsid(args.SourceStationId);
                 if (!station.IsSetup)
