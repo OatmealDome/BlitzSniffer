@@ -1,6 +1,7 @@
 ﻿using BlitzCommon.Util;
 using Syroot.BinaryData;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -26,12 +27,14 @@ namespace BlitzCommon.Resources
 
         public SnifferResource(byte[] data)
         {
-            Key = new byte[16];
+            Key = null;
             Data = data;
         }
 
-        private SnifferResource(byte[] data, byte[] key)
+        public SnifferResource(byte[] data, byte[] key)
         {
+            Trace.Assert(key != null && key.Length == 16);
+
             Key = key;
             Data = data;
         }
@@ -98,7 +101,12 @@ namespace BlitzCommon.Resources
 
             byte[] nonce = new byte[12];
 
-            rngCrypto.GetBytes(Key);
+            if (Key == null)
+            {
+                Key = new byte[16];
+                rngCrypto.GetBytes(Key);
+            }
+
             rngCrypto.GetBytes(nonce);
 
             byte[] ciphertext = new byte[Data.Length];
