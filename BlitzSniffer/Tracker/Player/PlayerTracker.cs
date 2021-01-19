@@ -646,51 +646,51 @@ namespace BlitzSniffer.Tracker.Player
             switch (id)
             {
                 case 0:
-                    return "Coop_SakelienStandard";
+                    return "SakelienStandard";
                 case 1:
-                    return "Coop_SakelienLarge";
+                    return "SakelienLarge";
                 case 2:
-                    return "Coop_SakelienSmall";
+                    return "SakelienSmall";
                 case 3:
-                    return "Coop_SakelienGolden";
+                    return "SakelienGolden";
                 case 4:
-                    return "Coop_SakelienBagman";
+                    return "SakelienBagman";
                 case 5:
-                    return "Coop_SakelienBagmanLarge";
+                    return "SakelienBagmanLarge";
                 case 6:
-                    return "Coop_SakelienBomber";
+                    return "SakelienBomber";
                 case 7:
-                    return "Coop_SakelienCannon";
+                    return "SakelienCannon";
                 case 8:
-                    return "Coop_SakelienCup";
+                    return "SakelienCup";
                 case 9:
-                    return "Coop_SakelienCupTwins";
+                    return "SakelienCupTwins";
                 case 10:
-                    return "Coop_SakelienEscape";
+                    return "SakelienEscape";
                 case 11:
-                    return "Coop_SakelienGeyser";
+                    return "SakelienGeyser";
                 case 12:
-                    return "Coop_SakelienShield";
+                    return "SakelienShield";
                 case 13:
-                    return "Coop_SakelienSnake";
+                    return "SakelienSnake";
                 case 14:
-                    return "Coop_SakelienTower";
+                    return "SakelienTower";
                 case 15:
-                    return "Coop_Sakediver";
+                    return "Sakediver";
                 case 16:
-                    return "Coop_Sakedozer";
+                    return "Sakedozer";
                 case 17:
-                    return "Coop_Sakeflyer";
+                    return "Sakeflyer";
                 case 18:
-                    return "Coop_Sakepuncher";
+                    return "Sakepuncher";
                 case 19:
-                    return "Coop_SakepuncherBulletSimpl";
+                    return "SakepuncherBulletSimpl";
                 case 20:
-                    return "Coop_SakepuncherBulletPunch";
+                    return "SakepuncherBulletPunch";
                 case 21:
-                    return "Coop_Sakerocket";
+                    return "Sakerocket";
                 case 22:
-                    return "Coop_SakerocketBullet";
+                    return "SakerocketBullet";
                 default:
                     return $"Unknown - Coop type ({id})";
             }
