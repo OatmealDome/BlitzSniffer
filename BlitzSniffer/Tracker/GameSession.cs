@@ -309,6 +309,11 @@ namespace BlitzSniffer.Tracker
                 return;
             }
 
+            if (CurrentClock >= args.Clock)
+            {
+                return;
+            }
+
             // Only tick if we've passed the start
             if (args.Clock >= StartClock)
             {
