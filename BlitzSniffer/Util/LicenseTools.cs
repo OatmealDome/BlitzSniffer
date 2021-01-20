@@ -40,22 +40,29 @@ namespace BlitzSniffer.Util
 
         public bool LoadAndVerifyLicense()
         {
-            LocalLicense = GetLicenseByFile();
-            if (LocalLicense == null || !LocalLicense.HasValidSignature(CRYPTOLENS_PUBLIC_KEY, MAX_OFFLINE_DAYS).IsValid())
+            try
             {
-                LocalLicense = GetLicenseByInet();
-                if (LocalLicense == null || !LocalLicense.HasValidSignature(CRYPTOLENS_PUBLIC_KEY).IsValid())
+                LocalLicense = GetLicenseByFile();
+                if (LocalLicense == null || !LocalLicense.HasValidSignature(CRYPTOLENS_PUBLIC_KEY, MAX_OFFLINE_DAYS).IsValid())
                 {
-                    LocalLicense = null;
+                    LocalLicense = GetLicenseByInet();
+                    if (LocalLicense == null || !LocalLicense.HasValidSignature(CRYPTOLENS_PUBLIC_KEY).IsValid())
+                    {
+                        LocalLicense = null;
 
-                    return false;
+                        return false;
+                    }
+
+                    // Save to file for caching
+                    string licenseStr = LocalLicense.SaveAsString();
+                    SnifferResource resource = new SnifferResource(Encoding.UTF8.GetBytes(licenseStr), CACHED_LICENSE_FILE_KEY);
+
+                    File.WriteAllBytes(CACHED_LICENSE_FILE, resource.Serialize());
                 }
-
-                // Save to file for caching
-                string licenseStr = LocalLicense.SaveAsString();
-                SnifferResource resource = new SnifferResource(Encoding.UTF8.GetBytes(licenseStr), CACHED_LICENSE_FILE_KEY);
-
-                File.WriteAllBytes(CACHED_LICENSE_FILE, resource.Serialize());
+            }
+            catch (Exception)
+            {
+                return false;
             }
 
             return true;
