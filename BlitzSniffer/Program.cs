@@ -191,7 +191,7 @@ namespace BlitzSniffer
 
                 if (!autoStartReplay)
                 {
-                    localLogContext.Information("Waiting for user to start replay");
+                    localLogContext.Information("Press return to start the replay.");
                     Console.ReadLine();
                 }
             }
@@ -222,7 +222,7 @@ namespace BlitzSniffer
             packetReceiver.Start(replayFile == null ? pcapDumpFile : null);
 
             localLogContext.Information("This session's log files are filed under \"{DateTime}\".", dateTime);
-            localLogContext.Information("Start up complete. Press any key to exit.");
+            localLogContext.Information("Start up complete. Press return to exit.");
 
             Console.ReadLine();
 
