@@ -1,4 +1,4 @@
-﻿using BlitzCommon.Resources.Source;
+using BlitzCommon.Resources.Source;
 using BlitzSniffer.Config;
 using BlitzSniffer.Event;
 using BlitzSniffer.Receiver;
@@ -125,16 +125,18 @@ namespace BlitzSniffer
             }
 #pragma warning restore CS0162
 
-            localLogContext.Information("BlitzSniffer {Version} ({BuildType}) for EndGameTV / Catalyst Workshop", ThisAssembly.AssemblyFileVersion, buildType);
-            localLogContext.Information("Copyright © 2020 - 2021 OatmealDome");
-
 #if !DEBUG
-            if (!LicenseTools.Instance.LoadAndVerifyLicense())
+            string licensee = LicenseTools.Instance.GetDataObjectString("licensedTo");
+            if (licensee == null)
             {
-                localLogContext.Error("Program validation failed. Please contact OatmealDome.");
-                return;
+                licensee = "Unknown Licensee";
             }
+#else
+            string licensee = "Local Debug Build";
 #endif
+
+            localLogContext.Information("BlitzSniffer {Version} ({BuildType}) for {Licensee}", ThisAssembly.AssemblyFileVersion, buildType, licensee);
+            localLogContext.Information("Copyright © 2020 - 2021 OatmealDome");
 
             if (useRom)
             {
