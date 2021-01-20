@@ -31,6 +31,7 @@ namespace SnifferResourceEncryptor
             logContext.Information("Encryption successful");
 
             logContext.Information("Key: {Key}", BitConverter.ToString(resource.Key).Replace("-", "").ToLower());
+            logContext.Information("Key (base64): {Key}", Convert.ToBase64String(resource.Key));
 
             File.WriteAllBytes(targetFile + "-enc", file);
 
