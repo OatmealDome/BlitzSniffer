@@ -115,6 +115,9 @@ namespace BlitzSniffer
             if (!LicenseTools.Instance.LoadAndVerifyLicense())
             {
                 localLogContext.Error("Program validation failed. Please contact OatmealDome.");
+
+                Log.CloseAndFlush();
+
                 return;
             }
 #endif
