@@ -24,6 +24,7 @@ namespace BlitzSniffer.Searcher
         
         private ICaptureDevice Device;
         private CancellationTokenSource BroadcastToken;
+        private bool DidPrintVersionWarning;
         private long QueryCount;
 
         private LanSessionSearcher(ICaptureDevice device) : base()
@@ -71,6 +72,14 @@ namespace BlitzSniffer.Searcher
                 if (firstByte == 0x1)
                 {
                     LanContentBrowseReply browseReply = new LanContentBrowseReply(reader);
+
+                    if (browseReply.SessionInfo.AppCommunicationVersion != int.Parse(Program.BLITZ_SUPPORTED_VERSION) && !DidPrintVersionWarning)
+                    {
+                        LogContext.Warning("AppVersion mismatch - session is running {Version}, expected {SupportedVersion}", browseReply.SessionInfo.AppCommunicationVersion, Program.BLITZ_SUPPORTED_VERSION);
+
+                        DidPrintVersionWarning = true;
+                    }
+
                     byte[] key = PiaEncryptionUtil.GenerateLanSessionKey(browseReply.SessionInfo.SessionParam, PiaEncryptionUtil.BlitzGameKey);
 
                     NotifySessionDataFound(SessionFoundDataType.Key, key);

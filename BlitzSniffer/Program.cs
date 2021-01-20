@@ -23,7 +23,7 @@ namespace BlitzSniffer
     {
         private static readonly string LOG_FORMAT = "[{Timestamp:HH:mm:ss} {Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
 
-        private static readonly string BLITZ_SUPPORTED_VERSION = "64"; // string because XML
+        public static readonly string BLITZ_SUPPORTED_VERSION = "64"; // string because XML
 
         /// <summary>
         /// Sniffs Splatoon 2 LAN sessions.
