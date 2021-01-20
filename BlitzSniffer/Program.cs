@@ -111,6 +111,14 @@ namespace BlitzSniffer
 
             ILogger localLogContext = Log.ForContext(Constants.SourceContextPropertyName, "Program");
 
+#if !DEBUG
+            if (!LicenseTools.Instance.LoadAndVerifyLicense())
+            {
+                localLogContext.Error("Program validation failed. Please contact OatmealDome.");
+                return;
+            }
+#endif
+
             // The "Unreachable code" warning is suppressed here as the compiler will see that IsPrerelease
             // is a constant boolean and tell us that one of the blocks will not be executed.
 #pragma warning disable CS0162
