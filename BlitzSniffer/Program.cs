@@ -152,6 +152,7 @@ namespace BlitzSniffer
             localLogContext.Information("BlitzSniffer {Version} ({BuildType}) for {Licensee}", ThisAssembly.AssemblyFileVersion, buildType, licensee);
             localLogContext.Information("Copyright © 2020 - 2021 OatmealDome");
 
+#if DEBUG
             if (useRom)
             {
                 RomConfig romConfig = SnifferConfig.Instance.Rom;
@@ -162,6 +163,9 @@ namespace BlitzSniffer
             {
                 GameResourceSnifferArchiveSource.Initialize();
             }
+#else
+            GameResourceSnifferArchiveSource.Initialize();
+#endif
 
             // Verify we're working with the right version
             XmlDocument gameConfigDocument = new XmlDocument();

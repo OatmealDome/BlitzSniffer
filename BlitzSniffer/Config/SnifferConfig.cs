@@ -13,11 +13,13 @@ namespace BlitzSniffer.Config
 
         private static readonly string ConfigPath = "config.json";
 
+#if DEBUG
         public RomConfig Rom
         {
             get;
             set;
         }
+#endif
 
         public SnicomConfig Snicom
         {
@@ -39,7 +41,9 @@ namespace BlitzSniffer.Config
 
         public SnifferConfig()
         {
+#if DEBUG
             Rom = new RomConfig();
+#endif
             Snicom = new SnicomConfig();
             DefaultDevice = "none";
             Key = "ABCDE-FGHIJ-KLMNO-PQRST";
