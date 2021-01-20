@@ -1,4 +1,4 @@
-using BlitzCommon.Resources;
+﻿using BlitzCommon.Resources;
 using BlitzSniffer.Config;
 using SKM.V3;
 using SKM.V3.Methods;
@@ -64,6 +64,20 @@ namespace BlitzSniffer.Util
         public LicenseKey GetLoadedLicense()
         {
             return LocalLicense;
+        }
+
+        public string GetDataObjectString(string name)
+        {
+            Trace.Assert(LocalLicense != null);
+
+            DataObject dataObject = LocalLicense.DataObjects.Where(d => d.Name == name).FirstOrDefault();
+
+            if (dataObject == null)
+            {
+                return null;
+            }
+
+            return dataObject.StringValue;
         }
 
         private LicenseKey GetLicenseByInet()
