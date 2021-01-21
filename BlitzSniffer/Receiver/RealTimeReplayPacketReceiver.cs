@@ -1,5 +1,6 @@
-﻿using NintendoNetcode.Pia;
+using NintendoNetcode.Pia;
 using SharpPcap;
+using SharpPcap.LibPcap;
 using System.Threading;
 
 namespace BlitzSniffer.Receiver
@@ -7,6 +8,12 @@ namespace BlitzSniffer.Receiver
     // Replays the session in real-time
     class RealTimeReplayPacketReceiver : ReplayPacketReceiver
     {
+        private string ReplayPath
+        {
+            get;
+            set;
+        }
+
         private Thread IncrementThread
         {
             get;
@@ -43,6 +50,7 @@ namespace BlitzSniffer.Receiver
 
         public RealTimeReplayPacketReceiver(PiaSessionType sessionType, string path, int offset) : base(sessionType, path)
         {
+            ReplayPath = path;
             IncrementThread = new Thread(TimeIncrement);
             RealTimeStartOffset = offset;
             ContinueSignal = new ManualResetEvent(false);
@@ -57,11 +65,19 @@ namespace BlitzSniffer.Receiver
         {
             lock (TimevalLock)
             {
-                RawCapture capture = Device.GetNextPacket();
-                Timeval = capture.Timeval;
+                // This is a terrible hack. We need the first packet to obtain Timeval, but
+                // there is no way to peek the first packet or rewind a CaptureFileReaderDevice.
+                // So, we make another device for temporary usage and use that to read the 
+                // capture's first packet, allowing us to leave the original device alone.
+                ICaptureDevice temporaryDevice = new CaptureFileReaderDevice(ReplayPath);
+
+                RawCapture firstPacket = temporaryDevice.GetNextPacket();
+                Timeval = firstPacket.Timeval;
 
                 // May take a few moments to catch up, but it'll get there eventually
                 Timeval.Seconds += (ulong)RealTimeStartOffset;
+
+                temporaryDevice.Close();
             }
 
             IncrementThread.Start();
