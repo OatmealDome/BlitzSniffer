@@ -1,3 +1,4 @@
+﻿using BlitzSniffer.Util;
 using NintendoNetcode.Pia;
 using SharpPcap;
 using SharpPcap.LibPcap;
@@ -14,7 +15,7 @@ namespace BlitzSniffer.Receiver
             set;
         }
 
-        private Thread IncrementThread
+        private MicroTimer Timer
         {
             get;
             set;
@@ -44,16 +45,16 @@ namespace BlitzSniffer.Receiver
             set;
         }
 
-        private bool IncrementThreadStop = false;
-
         private object TimevalLock = new object();
 
         public RealTimeReplayPacketReceiver(PiaSessionType sessionType, string path, int offset) : base(sessionType, path)
         {
             ReplayPath = path;
-            IncrementThread = new Thread(TimeIncrement);
             RealTimeStartOffset = offset;
             ContinueSignal = new ManualResetEvent(false);
+
+            Timer = new MicroTimer(1000);
+            Timer.MicroTimerElapsed += TimerElapsed;
         }
 
         public RealTimeReplayPacketReceiver(PiaSessionType sessionType, string path) : this(sessionType, path, 0)
@@ -80,7 +81,7 @@ namespace BlitzSniffer.Receiver
                 temporaryDevice.Close();
             }
 
-            IncrementThread.Start();
+            Timer.Start();
 
             base.Start(outputFile);
         }
@@ -89,34 +90,30 @@ namespace BlitzSniffer.Receiver
         {
             base.Dispose();
 
-            IncrementThreadStop = true;
-            IncrementThread.Join();
+            if (!Timer.StopAndWait(1000))
+            {
+                Timer.Abort();
+            }
             
             ContinueSignal.Dispose();
         }
 
-        // This is probably terrible, but it works
-        private void TimeIncrement()
+        private void TimerElapsed(object sender, MicroTimerEventArgs e)
         {
-            while (!IncrementThreadStop)
+            lock (TimevalLock)
             {
-                Thread.Sleep(1);
-
-                lock (TimevalLock)
+                Timeval.MicroSeconds += 1000;
+                if (Timeval.MicroSeconds >= 1000000)
                 {
-                    Timeval.MicroSeconds += 1000;
-                    if (Timeval.MicroSeconds >= 1000000)
-                    {
-                        Timeval.Seconds++;
-                        Timeval.MicroSeconds = Timeval.MicroSeconds % 1000000;
-                    }
+                    Timeval.Seconds++;
+                    Timeval.MicroSeconds = Timeval.MicroSeconds % 1000000;
+                }
 
-                    if (WaitForTimeval != null)
+                if (WaitForTimeval != null)
+                {
+                    if (WaitForTimeval < Timeval)
                     {
-                        if (WaitForTimeval < Timeval)
-                        {
-                            ContinueSignal.Set();
-                        }
+                        ContinueSignal.Set();
                     }
                 }
             }
