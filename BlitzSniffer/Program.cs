@@ -4,6 +4,7 @@ using BlitzSniffer.Event;
 using BlitzSniffer.Receiver;
 using BlitzSniffer.Resources.Source;
 using BlitzSniffer.Searcher;
+using BlitzSniffer.TextInterface;
 using BlitzSniffer.Tracker;
 using BlitzSniffer.Util;
 using BlitzSniffer.WebSocket;
@@ -28,13 +29,14 @@ namespace BlitzSniffer
         /// <summary>
         /// Sniffs Splatoon 2 LAN sessions.
         /// </summary>
+        /// <param name="consoleOnly">Disables the fancy user interface.</param>
         /// <param name="onlineSession">Sniff online sessions.</param>
         /// <param name="useRom">If a Splatoon 2 ROM should be used instead of the GameData file.</param>
         /// <param name="replayFile">A pcap file to replay.</param>
         /// <param name="replayInRealTime">If the replay file should be replayed in real-time.</param>
         /// <param name="realTimeStartOffset">When to fast-forward to in the replay file.</param>
         /// <param name="autoStartReplay">Whether to skip prompting the user to start the replay or not.</param>
-        static void Main(bool onlineSession = false, bool useRom = false, FileInfo replayFile = null, bool replayInRealTime = false, int realTimeStartOffset = 0, bool autoStartReplay = false)
+        static void Main(bool consoleOnly = false, bool onlineSession = false, bool useRom = false, FileInfo replayFile = null, bool replayInRealTime = false, int realTimeStartOffset = 0, bool autoStartReplay = false)
         {
             Console.OutputEncoding = Encoding.UTF8;
 
@@ -246,9 +248,17 @@ namespace BlitzSniffer
             packetReceiver.Start(replayFile == null ? pcapDumpFile : null);
 
             localLogContext.Information("This session's log files are filed under \"{DateTime}\".", dateTime);
-            localLogContext.Information("Start up complete. Press return to exit.");
 
-            Console.ReadLine();
+            if (!consoleOnly)
+            {
+                Terminal.Gui.Application.Run<SnifferTextApplication>();
+            }
+            else
+            {
+                localLogContext.Information("Start up complete. Press return to exit.");
+
+                Console.ReadKey();
+            }
 
             SessionSearcher.Instance.Dispose();
 
