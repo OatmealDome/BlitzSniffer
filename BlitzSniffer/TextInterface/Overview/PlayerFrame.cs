@@ -74,30 +74,24 @@ namespace BlitzSniffer.TextInterface.Overview
                 {
                     X = x,
                     Y = y,
-                    Text = $"E  PlayerLbl{i}",
                     Width = PLAYER_LABEL_LENGTH,
                     Height = 1,
-                    Visible = false
                 };
 
                 Label specialLabel = new Label()
                 {
                     X = x,
                     Y = y + 1,
-                    Text = "   SP   ERR ",
                     Width = PLAYER_LABEL_LENGTH,
                     Height = 1,
-                    Visible = false
                 };
 
                 Label statusLabel = new Label()
                 {
                     X = x,
                     Y = y + 2,
-                    Text = "   ERROR",
                     Width = PLAYER_LABEL_LENGTH,
                     Height = 1,
-                    Visible = false
                 };
 
                 NameLabels.Add(nameLabel);
@@ -107,6 +101,8 @@ namespace BlitzSniffer.TextInterface.Overview
                 this.Add(nameLabel);
                 this.Add(specialLabel);
                 this.Add(statusLabel);
+
+                ResetPlayer(i);
             }
 
             EventTracker.Instance.SendEvent += HandleGameEvent;
