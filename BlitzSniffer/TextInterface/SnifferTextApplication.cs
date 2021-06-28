@@ -1,4 +1,5 @@
-﻿using BlitzSniffer.Util;
+﻿using BlitzSniffer.TextInterface.Overview;
+using BlitzSniffer.Util;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -32,7 +33,15 @@ namespace BlitzSniffer.TextInterface
 
             Console.SetOut(new TextViewWriter(textView));
 
-            //
+            // Game Overview tab
+
+            GameOverviewView overviewView = new GameOverviewView()
+            {
+                Width = Dim.Fill(),
+                Height = Dim.Fill()
+            };
+
+            tabView.AddTab(new TabView.Tab("Game Overview", overviewView), false);
 
             this.Add(tabView);
         }
