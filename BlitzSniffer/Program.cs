@@ -31,7 +31,7 @@ namespace BlitzSniffer
         /// </summary>
         /// <param name="consoleOnly">Disables the fancy user interface.</param>
         /// <param name="onlineSession">Sniff online sessions.</param>
-        /// <param name="useRom">If a Splatoon 2 ROM should be used instead of the GameData file.</param>
+        /// <param name="useRom">If a Splatoon 2 ROM should be used instead of the GameData file. This option has no effect in Release builds.</param>
         /// <param name="replayFile">A pcap file to replay.</param>
         /// <param name="replayInRealTime">If the replay file should be replayed in real-time.</param>
         /// <param name="realTimeStartOffset">When to fast-forward to in the replay file.</param>
