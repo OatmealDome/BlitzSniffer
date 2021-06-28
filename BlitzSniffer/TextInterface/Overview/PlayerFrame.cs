@@ -17,6 +17,7 @@ namespace BlitzSniffer.TextInterface.Overview
 
         private Dictionary<uint, int> PidToUiId;
         private Dictionary<int, string> PlayerNames;
+        private Dictionary<int, bool> PlayerIsInSpecial;
 
         private List<Label> NameLabels;
         private List<Label> SpecialGaugeLabels;
@@ -30,6 +31,7 @@ namespace BlitzSniffer.TextInterface.Overview
         {
             PidToUiId = new Dictionary<uint, int>();
             PlayerNames = new Dictionary<int, string>();
+            PlayerIsInSpecial = new Dictionary<int, bool>();
 
             NameLabels = new List<Label>();
             SpecialGaugeLabels = new List<Label>();
@@ -111,6 +113,7 @@ namespace BlitzSniffer.TextInterface.Overview
         private void ResetPlayer(int idx)
         {
             PlayerNames[idx] = $"InvalName{idx}";
+            PlayerIsInSpecial[idx] = false;
 
             Label nameLabel = NameLabels[idx];
             nameLabel.Text = $"E  PlayerLbl{idx}";
@@ -154,6 +157,12 @@ namespace BlitzSniffer.TextInterface.Overview
         {
             Label gaugeLabel = SpecialGaugeLabels[idx];
             gaugeLabel.Text = $"   SP   {gauge}%";
+        }
+
+        private void SetPlayerInSpecial(int idx)
+        {
+            Label gaugeLabel = SpecialGaugeLabels[idx];
+            gaugeLabel.Text = $"   SP   ACT";
         }
 
         private void HandleGameEvent(object sender, SendEventArgs args)
@@ -203,13 +212,48 @@ namespace BlitzSniffer.TextInterface.Overview
 
                     break;
                 case PlayerDeathEvent deathEvent:
-                    Application.MainLoop?.Invoke(() => SetPlayerSmallStatus(PidToUiId[deathEvent.PlayerIdx], 'D'));
+                    int deathUid = PidToUiId[deathEvent.PlayerIdx];
+
+                    PlayerIsInSpecial[deathUid] = false;
+
+                    Application.MainLoop?.Invoke(() =>
+                    {
+                        SetPlayerSmallStatus(deathUid, 'D');
+                        SetPlayerGauge(deathUid, 0);
+                    });
                     break;
                 case PlayerRespawnEvent respawnEvent:
                     Application.MainLoop?.Invoke(() => SetPlayerSmallStatus(PidToUiId[respawnEvent.PlayerIdx], 'A'));
                     break;
                 case PlayerGaugeUpdateEvent gaugeEvent:
-                    Application.MainLoop?.Invoke(() => SetPlayerGauge(PidToUiId[gaugeEvent.PlayerIdx], gaugeEvent.Charge));
+                    int gaugeUid = PidToUiId[gaugeEvent.PlayerIdx];
+
+                    if (PlayerIsInSpecial[gaugeUid])
+                    {
+                        if (gaugeEvent.Charge == 0)
+                        {
+                            PlayerIsInSpecial[gaugeUid] = false;
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+
+                    Application.MainLoop?.Invoke(() =>
+                    {
+                        SetPlayerGauge(gaugeUid, gaugeEvent.Charge);
+                    });
+                    break;
+                case PlayerSpecialActivateEvent activateEvent:
+                    int activateUid = PidToUiId[activateEvent.PlayerIdx];
+
+                    Application.MainLoop?.Invoke(() =>
+                    {
+                        PlayerIsInSpecial[activateUid] = true;
+                        SetPlayerInSpecial(activateUid);
+                    });
+
                     break;
                 default:
                     return;
