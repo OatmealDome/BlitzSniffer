@@ -5,7 +5,7 @@ using BlitzSniffer.Event.Setup.Player;
 using System.Collections.Generic;
 using Terminal.Gui;
 
-namespace BlitzSniffer.TextInterface.Overview
+namespace BlitzSniffer.TextInterface.Overview.Player
 {
     class PlayerFrame : FrameView
     {

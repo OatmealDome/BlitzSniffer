@@ -1,4 +1,5 @@
-﻿using Terminal.Gui;
+﻿using BlitzSniffer.TextInterface.Overview.Player;
+using Terminal.Gui;
 
 namespace BlitzSniffer.TextInterface.Overview
 {
