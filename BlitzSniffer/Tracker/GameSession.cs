@@ -297,7 +297,7 @@ namespace BlitzSniffer.Tracker
             }
         }
 
-        public void HandleCloneChanged(object sender, CloneChangedEventArgs args)
+        private void HandleCloneChanged(object sender, CloneChangedEventArgs args)
         {
             if (!IsSetup || !ClockReady)
             {
@@ -312,7 +312,7 @@ namespace BlitzSniffer.Tracker
             InGameCloneChanged?.Invoke(sender, args);
         }
 
-        public void HandleClockChanged(object sender, ClockChangedEventArgs args)
+        private void HandleClockChanged(object sender, ClockChangedEventArgs args)
         {
             if (!ClockReady)
             {
