@@ -1,6 +1,6 @@
-﻿using BlitzSniffer.Event;
-using BlitzSniffer.Event.Setup;
-using BlitzSniffer.Event.Versus;
+﻿using BlitzSniffer.Game.Event;
+using BlitzSniffer.Game.Event.Setup;
+using BlitzSniffer.Game.Event.Versus;
 using BlitzSniffer.Tracker;
 using Terminal.Gui;
 

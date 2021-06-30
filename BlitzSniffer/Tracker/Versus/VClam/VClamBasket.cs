@@ -1,6 +1,6 @@
 using Blitz.Cmn.Def;
-using BlitzSniffer.Event;
-using BlitzSniffer.Event.Versus.VClam;
+using BlitzSniffer.Game.Event;
+using BlitzSniffer.Game.Event.Versus.VClam;
 using System;
 using System.Diagnostics;
 

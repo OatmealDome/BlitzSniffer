@@ -1,7 +1,7 @@
-﻿using BlitzSniffer.Event;
-using BlitzSniffer.Event.Player;
-using BlitzSniffer.Event.Setup;
-using BlitzSniffer.Event.Setup.Player;
+﻿using BlitzSniffer.Game.Event;
+using BlitzSniffer.Game.Event.Player;
+using BlitzSniffer.Game.Event.Setup;
+using BlitzSniffer.Game.Event.Setup.Player;
 using System.Collections.Generic;
 using Terminal.Gui;
 

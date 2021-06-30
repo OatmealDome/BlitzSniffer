@@ -1,6 +1,6 @@
 using BlitzCommon.Resources.Source;
 using BlitzSniffer.Config;
-using BlitzSniffer.Event;
+using BlitzSniffer.Game.Event;
 using BlitzSniffer.Network.Receiver;
 using BlitzSniffer.Resources.Source;
 using BlitzSniffer.Network.Searcher;

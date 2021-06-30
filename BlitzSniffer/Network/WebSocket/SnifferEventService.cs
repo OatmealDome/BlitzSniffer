@@ -1,4 +1,4 @@
-﻿using BlitzSniffer.Event;
+﻿using BlitzSniffer.Game.Event;
 using Serilog;
 using Serilog.Core;
 using System.Text.Json;

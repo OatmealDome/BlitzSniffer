@@ -1,5 +1,5 @@
-﻿using BlitzSniffer.Event;
-using BlitzSniffer.Event.Player;
+﻿using BlitzSniffer.Game.Event;
+using BlitzSniffer.Game.Event.Player;
 using Serilog;
 using Serilog.Core;
 using System;

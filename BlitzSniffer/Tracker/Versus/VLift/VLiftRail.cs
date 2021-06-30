@@ -1,6 +1,6 @@
 ﻿using Blitz.Cmn.Def;
-using BlitzSniffer.Event;
-using BlitzSniffer.Event.Versus.VLift;
+using BlitzSniffer.Game.Event;
+using BlitzSniffer.Game.Event.Versus.VLift;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

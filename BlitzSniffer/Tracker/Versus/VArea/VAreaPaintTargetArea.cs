@@ -1,6 +1,6 @@
 ﻿using Blitz.Cmn.Def;
-using BlitzSniffer.Event;
-using BlitzSniffer.Event.Versus.VArea;
+using BlitzSniffer.Game.Event;
+using BlitzSniffer.Game.Event.Versus.VArea;
 
 namespace BlitzSniffer.Tracker.Versus.VArea
 {

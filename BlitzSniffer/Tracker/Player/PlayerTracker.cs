@@ -1,10 +1,10 @@
 using Blitz.Cmn.Def;
 using BlitzCommon.Blitz.Cmn.Def;
 using BlitzSniffer.Network.Netcode.Clone;
-using BlitzSniffer.Event;
-using BlitzSniffer.Event.Player;
-using BlitzSniffer.Event.Player.VGoal;
-using BlitzSniffer.Event.Player.VLift;
+using BlitzSniffer.Game.Event;
+using BlitzSniffer.Game.Event.Player;
+using BlitzSniffer.Game.Event.Player.VGoal;
+using BlitzSniffer.Game.Event.Player.VLift;
 using BlitzSniffer.Resources;
 using BlitzSniffer.Tracker.Station;
 using BlitzSniffer.Tracker.Versus.VLift;

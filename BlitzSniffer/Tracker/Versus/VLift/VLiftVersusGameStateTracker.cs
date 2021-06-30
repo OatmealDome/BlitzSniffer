@@ -1,8 +1,8 @@
 ﻿using Blitz.Cmn.Def;
 using BlitzSniffer.Network.Netcode.Clone;
-using BlitzSniffer.Event;
-using BlitzSniffer.Event.Versus;
-using BlitzSniffer.Event.Versus.VLift;
+using BlitzSniffer.Game.Event;
+using BlitzSniffer.Game.Event.Versus;
+using BlitzSniffer.Game.Event.Versus.VLift;
 using Nintendo.Sead;
 using Syroot.BinaryData;
 using System.Collections.Generic;

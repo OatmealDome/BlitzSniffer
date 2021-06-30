@@ -1,7 +1,7 @@
 using Blitz.Cmn.Def;
 using BlitzSniffer.Network.Netcode.Clone;
-using BlitzSniffer.Event;
-using BlitzSniffer.Event.Setup;
+using BlitzSniffer.Game.Event;
+using BlitzSniffer.Game.Event.Setup;
 using BlitzSniffer.Tracker.Coop;
 using BlitzSniffer.Tracker.Player;
 using BlitzSniffer.Tracker.Station;
