@@ -1,5 +1,5 @@
 ﻿using BlitzCommon.Blitz.Cmn.Def;
-using BlitzSniffer.Resources;
+using BlitzSniffer.Game.Resources;
 using System;
 
 namespace BlitzSniffer.Game.Event.Setup.Player

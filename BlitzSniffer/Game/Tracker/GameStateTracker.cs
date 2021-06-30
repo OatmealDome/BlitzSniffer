@@ -1,4 +1,4 @@
-﻿using BlitzSniffer.Resources;
+﻿using BlitzSniffer.Game.Resources;
 using Nintendo.Sead;
 using System;
 

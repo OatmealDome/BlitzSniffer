@@ -1,7 +1,7 @@
 ﻿using Blitz.Cmn.Def;
 using BlitzSniffer.Game.Event.Setup.Player;
 using BlitzSniffer.Game.Event.Setup.Rule;
-using BlitzSniffer.Resources;
+using BlitzSniffer.Game.Resources;
 using BlitzSniffer.Game.Tracker;
 using System.Collections.Generic;
 using System.Diagnostics;

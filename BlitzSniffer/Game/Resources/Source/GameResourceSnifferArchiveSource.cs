@@ -6,7 +6,7 @@ using Syroot.NintenTools.Yaz0;
 using System;
 using System.IO;
 
-namespace BlitzSniffer.Resources.Source
+namespace BlitzSniffer.Game.Resources.Source
 {
     class GameResourceSnifferArchiveSource : GameResourceSource
     {

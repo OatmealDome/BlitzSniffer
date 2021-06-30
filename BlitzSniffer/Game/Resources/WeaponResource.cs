@@ -3,7 +3,7 @@ using Nintendo;
 using System.Collections.Generic;
 using System.IO;
 
-namespace BlitzSniffer.Resources
+namespace BlitzSniffer.Game.Resources
 {
     class WeaponResource
     {

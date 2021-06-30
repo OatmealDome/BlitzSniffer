@@ -5,7 +5,7 @@ using BlitzSniffer.Game.Event;
 using BlitzSniffer.Game.Event.Player;
 using BlitzSniffer.Game.Event.Player.VGoal;
 using BlitzSniffer.Game.Event.Player.VLift;
-using BlitzSniffer.Resources;
+using BlitzSniffer.Game.Resources;
 using BlitzSniffer.Game.Tracker.Station;
 using BlitzSniffer.Game.Tracker.Versus.VLift;
 using BlitzSniffer.Util;
