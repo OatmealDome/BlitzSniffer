@@ -5,7 +5,7 @@ using System.Reflection;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
-namespace BlitzSniffer.WebSocket
+namespace BlitzSniffer.Network.WebSocket
 {
     public class SnifferServer
     {

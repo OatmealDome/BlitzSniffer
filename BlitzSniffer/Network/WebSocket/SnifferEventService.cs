@@ -5,7 +5,7 @@ using System.Text.Json;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
-namespace BlitzSniffer.WebSocket
+namespace BlitzSniffer.Network.WebSocket
 {
     class SnifferEventService : WebSocketBehavior
     {

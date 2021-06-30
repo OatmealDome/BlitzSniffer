@@ -7,7 +7,7 @@ using BlitzSniffer.Network.Searcher;
 using BlitzSniffer.TextInterface;
 using BlitzSniffer.Tracker;
 using BlitzSniffer.Util;
-using BlitzSniffer.WebSocket;
+using BlitzSniffer.Network.WebSocket;
 using LibHac;
 using NintendoNetcode.Pia;
 using Serilog;
