@@ -1,5 +1,5 @@
 using BlitzSniffer.Network.Netcode.Clone;
-using BlitzSniffer.Enl;
+using BlitzSniffer.Network.Netcode.Enl;
 using NintendoNetcode.Enl.Record;
 using Syroot.BinaryData;
 using System.Collections.Generic;

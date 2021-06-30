@@ -1,7 +1,7 @@
 ﻿using NintendoNetcode.Enl;
 using NintendoNetcode.Enl.Record;
 
-namespace BlitzSniffer.Enl
+namespace BlitzSniffer.Network.Netcode.Enl
 {
     public class EnlHolder
     {

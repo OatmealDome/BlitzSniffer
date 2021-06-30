@@ -1,7 +1,7 @@
 ﻿using NintendoNetcode.Enl.Record;
 using System;
 
-namespace BlitzSniffer.Enl
+namespace BlitzSniffer.Network.Netcode.Enl
 {
     public class SystemInfoReceivedEventArgs : EventArgs
     {

@@ -1,6 +1,6 @@
 using BlitzSniffer.Network.Netcode.Clone;
 using BlitzSniffer.Config;
-using BlitzSniffer.Enl;
+using BlitzSniffer.Network.Netcode.Enl;
 using BlitzSniffer.Network.Searcher;
 using NintendoNetcode.Enl;
 using NintendoNetcode.Pia;
