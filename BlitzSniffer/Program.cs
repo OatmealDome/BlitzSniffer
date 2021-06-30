@@ -3,7 +3,7 @@ using BlitzSniffer.Config;
 using BlitzSniffer.Event;
 using BlitzSniffer.Network.Receiver;
 using BlitzSniffer.Resources.Source;
-using BlitzSniffer.Searcher;
+using BlitzSniffer.Network.Searcher;
 using BlitzSniffer.TextInterface;
 using BlitzSniffer.Tracker;
 using BlitzSniffer.Util;

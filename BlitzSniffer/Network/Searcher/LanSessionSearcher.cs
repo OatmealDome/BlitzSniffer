@@ -14,7 +14,7 @@ using System.Net.Sockets;
 using System.Threading;
 using static SharpPcap.LibPcap.Sockaddr;
 
-namespace BlitzSniffer.Searcher
+namespace BlitzSniffer.Network.Searcher
 {
     class LanSessionSearcher : SessionSearcher
     {

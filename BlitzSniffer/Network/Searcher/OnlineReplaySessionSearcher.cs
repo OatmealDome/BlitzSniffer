@@ -3,7 +3,7 @@ using SharpPcap;
 using Syroot.BinaryData;
 using System.IO;
 
-namespace BlitzSniffer.Searcher
+namespace BlitzSniffer.Network.Searcher
 {
     class OnlineReplaySessionSearcher : SessionSearcher
     {

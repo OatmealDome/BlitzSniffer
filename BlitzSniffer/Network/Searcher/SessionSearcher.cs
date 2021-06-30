@@ -2,7 +2,7 @@
 using Serilog.Core;
 using System;
 
-namespace BlitzSniffer.Searcher
+namespace BlitzSniffer.Network.Searcher
 {
     abstract class SessionSearcher : IDisposable
     {

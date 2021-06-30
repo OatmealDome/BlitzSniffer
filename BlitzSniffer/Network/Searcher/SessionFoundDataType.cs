@@ -1,4 +1,4 @@
-﻿namespace BlitzSniffer.Searcher
+﻿namespace BlitzSniffer.Network.Searcher
 {
     public enum SessionFoundDataType
     {

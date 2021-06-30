@@ -5,7 +5,7 @@ using System;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace BlitzSniffer.Searcher
+namespace BlitzSniffer.Network.Searcher
 {
     class SnicomSessionSearcher : SessionSearcher
     {
