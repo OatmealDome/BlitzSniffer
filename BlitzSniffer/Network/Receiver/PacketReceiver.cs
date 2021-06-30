@@ -1,4 +1,4 @@
-using BlitzSniffer.Clone;
+using BlitzSniffer.Network.Netcode.Clone;
 using BlitzSniffer.Config;
 using BlitzSniffer.Enl;
 using BlitzSniffer.Network.Searcher;

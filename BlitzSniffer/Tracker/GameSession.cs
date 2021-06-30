@@ -1,5 +1,5 @@
 using Blitz.Cmn.Def;
-using BlitzSniffer.Clone;
+using BlitzSniffer.Network.Netcode.Clone;
 using BlitzSniffer.Event;
 using BlitzSniffer.Event.Setup;
 using BlitzSniffer.Tracker.Coop;
@@ -19,7 +19,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using static BlitzSniffer.Clone.CloneHolder;
+using static BlitzSniffer.Network.Netcode.Clone.CloneHolder;
 
 namespace BlitzSniffer.Tracker
 {

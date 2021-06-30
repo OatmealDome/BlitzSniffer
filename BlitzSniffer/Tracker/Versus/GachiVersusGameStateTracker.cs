@@ -1,5 +1,5 @@
 ﻿using Blitz.Cmn.Def;
-using BlitzSniffer.Clone;
+using BlitzSniffer.Network.Netcode.Clone;
 using BlitzSniffer.Event;
 using BlitzSniffer.Event.Versus;
 using Nintendo.Sead;

@@ -1,5 +1,5 @@
 using Blitz.Cmn.Def;
-using BlitzSniffer.Clone;
+using BlitzSniffer.Network.Netcode.Clone;
 using Nintendo.Sead;
 using Syroot.BinaryData;
 using System.IO;

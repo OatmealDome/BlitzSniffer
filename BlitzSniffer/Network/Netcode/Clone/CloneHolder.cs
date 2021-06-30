@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace BlitzSniffer.Clone
+namespace BlitzSniffer.Network.Netcode.Clone
 {
     class CloneHolder
     {

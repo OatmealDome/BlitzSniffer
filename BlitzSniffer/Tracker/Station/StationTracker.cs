@@ -1,4 +1,4 @@
-using BlitzSniffer.Clone;
+using BlitzSniffer.Network.Netcode.Clone;
 using BlitzSniffer.Enl;
 using NintendoNetcode.Enl.Record;
 using Syroot.BinaryData;

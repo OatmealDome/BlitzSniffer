@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BlitzSniffer.Clone
+namespace BlitzSniffer.Network.Netcode.Clone
 {
     public class CloneChangedEventArgs : EventArgs
     {
