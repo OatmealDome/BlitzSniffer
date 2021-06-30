@@ -1,7 +1,7 @@
 using BlitzCommon.Resources.Source;
 using BlitzSniffer.Config;
 using BlitzSniffer.Event;
-using BlitzSniffer.Receiver;
+using BlitzSniffer.Network.Receiver;
 using BlitzSniffer.Resources.Source;
 using BlitzSniffer.Searcher;
 using BlitzSniffer.TextInterface;

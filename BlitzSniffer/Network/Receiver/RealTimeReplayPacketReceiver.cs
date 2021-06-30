@@ -4,7 +4,7 @@ using SharpPcap;
 using SharpPcap.LibPcap;
 using System.Threading;
 
-namespace BlitzSniffer.Receiver
+namespace BlitzSniffer.Network.Receiver
 {
     // Replays the session in real-time
     class RealTimeReplayPacketReceiver : ReplayPacketReceiver

@@ -27,7 +27,7 @@ using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Threading;
 
-namespace BlitzSniffer.Receiver
+namespace BlitzSniffer.Network.Receiver
 {
     public abstract class PacketReceiver : IDisposable
     {

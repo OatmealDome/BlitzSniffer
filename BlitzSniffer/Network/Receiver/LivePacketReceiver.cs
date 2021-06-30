@@ -4,7 +4,7 @@ using SharpPcap;
 using SharpPcap.LibPcap;
 using SharpPcap.Npcap;
 
-namespace BlitzSniffer.Receiver
+namespace BlitzSniffer.Network.Receiver
 {
     public class LivePacketReceiver : PacketReceiver
     {

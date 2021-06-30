@@ -1,7 +1,7 @@
 ﻿using NintendoNetcode.Pia;
 using SharpPcap.LibPcap;
 
-namespace BlitzSniffer.Receiver
+namespace BlitzSniffer.Network.Receiver
 {
     // Replays the session as fast as the CPU allows it
     public class ReplayPacketReceiver : PacketReceiver
