@@ -1,5 +1,5 @@
-﻿using BlitzSniffer.Tracker;
-using BlitzSniffer.Tracker.Versus.VArea;
+﻿using BlitzSniffer.Game.Tracker;
+using BlitzSniffer.Game.Tracker.Versus.VArea;
 
 namespace BlitzSniffer.Game.Event.Setup.Rule
 {

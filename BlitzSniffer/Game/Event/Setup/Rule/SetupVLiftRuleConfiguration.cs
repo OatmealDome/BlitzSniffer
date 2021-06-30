@@ -1,5 +1,5 @@
-﻿using BlitzSniffer.Tracker;
-using BlitzSniffer.Tracker.Versus.VLift;
+﻿using BlitzSniffer.Game.Tracker;
+using BlitzSniffer.Game.Tracker.Versus.VLift;
 using System.Collections.Generic;
 
 namespace BlitzSniffer.Game.Event.Setup.Rule

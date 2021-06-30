@@ -1,7 +1,7 @@
 ﻿using BlitzSniffer.Game.Event;
 using BlitzSniffer.Game.Event.Setup;
 using BlitzSniffer.Game.Event.Versus;
-using BlitzSniffer.Tracker;
+using BlitzSniffer.Game.Tracker;
 using Terminal.Gui;
 
 namespace BlitzSniffer.TextInterface.Overview.GlobalState

@@ -2,7 +2,7 @@
 using BlitzSniffer.Game.Event.Setup.Player;
 using BlitzSniffer.Game.Event.Setup.Rule;
 using BlitzSniffer.Resources;
-using BlitzSniffer.Tracker;
+using BlitzSniffer.Game.Tracker;
 using System.Collections.Generic;
 using System.Diagnostics;
 

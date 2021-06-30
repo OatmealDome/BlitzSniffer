@@ -5,7 +5,7 @@ using BlitzSniffer.Network.Receiver;
 using BlitzSniffer.Resources.Source;
 using BlitzSniffer.Network.Searcher;
 using BlitzSniffer.TextInterface;
-using BlitzSniffer.Tracker;
+using BlitzSniffer.Game.Tracker;
 using BlitzSniffer.Util;
 using BlitzSniffer.Network.WebSocket;
 using LibHac;
