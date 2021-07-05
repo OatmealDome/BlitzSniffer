@@ -99,7 +99,7 @@ namespace BlitzSniffer.Network.Receiver
                 DumperThread.Start();
             }
 
-            searcher.SessionFound += SessionFound;
+            searcher.SessionDataFound += SessionFound;
 
             Device.OnPacketArrival += OnPacketArrival;
             Device.StartCapture();
