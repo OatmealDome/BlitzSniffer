@@ -2,7 +2,7 @@
 
 namespace BlitzSniffer.Network.Searcher
 {
-    public class SessionDataFoundArgs : EventArgs
+    public class SessionDataFoundEventArgs : EventArgs
     {
         public SessionFoundDataType FoundDataType
         {
@@ -16,7 +16,7 @@ namespace BlitzSniffer.Network.Searcher
             set;
         }
 
-        public SessionDataFoundArgs(SessionFoundDataType type, byte[] data)
+        public SessionDataFoundEventArgs(SessionFoundDataType type, byte[] data)
         {
             FoundDataType = type;
             Data = data;

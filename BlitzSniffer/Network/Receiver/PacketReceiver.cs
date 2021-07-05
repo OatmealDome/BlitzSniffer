@@ -118,7 +118,7 @@ namespace BlitzSniffer.Network.Receiver
             Device.Close();
         }
 
-        private void SessionFound(object sender, SessionDataFoundArgs e)
+        private void SessionFound(object sender, SessionDataFoundEventArgs e)
         {
             if (e.FoundDataType == SessionFoundDataType.Key)
             {

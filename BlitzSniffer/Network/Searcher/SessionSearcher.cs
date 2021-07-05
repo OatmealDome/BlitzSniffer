@@ -8,7 +8,7 @@ namespace BlitzSniffer.Network.Searcher
     {
         private static readonly ILogger LogContext = Log.ForContext(Constants.SourceContextPropertyName, "SessionSearcher");
 
-        public delegate void SessionFoundHandler(object sender, SessionDataFoundArgs args);
+        public delegate void SessionFoundHandler(object sender, SessionDataFoundEventArgs args);
         public event SessionFoundHandler SessionFound;
 
         protected SessionSearcher()
@@ -20,7 +20,7 @@ namespace BlitzSniffer.Network.Searcher
 
         protected void NotifySessionDataFound(SessionFoundDataType type, byte[] data)
         {
-            SessionFound?.Invoke(this, new SessionDataFoundArgs(type, data));
+            SessionFound?.Invoke(this, new SessionDataFoundEventArgs(type, data));
 
             if (type == SessionFoundDataType.Key)
             {
