@@ -86,7 +86,7 @@ namespace BlitzSniffer.Network.Receiver
             SessionType = sessionType;
         }
 
-        public virtual void Start(string outputFile = null)
+        public virtual void Start(SessionSearcher searcher, string outputFile = null)
         {
             if (outputFile != null)
             {
@@ -99,7 +99,7 @@ namespace BlitzSniffer.Network.Receiver
                 DumperThread.Start();
             }
 
-            SessionSearcher.Instance.SessionFound += SessionFound;
+            searcher.SessionFound += SessionFound;
 
             Device.OnPacketArrival += OnPacketArrival;
             Device.StartCapture();

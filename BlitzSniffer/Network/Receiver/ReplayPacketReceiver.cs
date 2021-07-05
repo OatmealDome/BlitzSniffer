@@ -1,4 +1,5 @@
-﻿using NintendoNetcode.Pia;
+﻿using BlitzSniffer.Network.Searcher;
+using NintendoNetcode.Pia;
 using SharpPcap.LibPcap;
 
 namespace BlitzSniffer.Network.Receiver
@@ -12,11 +13,11 @@ namespace BlitzSniffer.Network.Receiver
             Device.Open();
         }
 
-        public override void Start(string outputFile = null)
+        public override void Start(SessionSearcher searcher, string outputFile = null)
         {
             Device.Filter = "ip and udp";
 
-            base.Start(outputFile);
+            base.Start(searcher, outputFile);
         }
 
     }

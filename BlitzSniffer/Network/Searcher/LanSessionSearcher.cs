@@ -27,7 +27,7 @@ namespace BlitzSniffer.Network.Searcher
         private bool DidPrintVersionWarning;
         private long QueryCount;
 
-        private LanSessionSearcher(ICaptureDevice device) : base()
+        public LanSessionSearcher(ICaptureDevice device) : base()
         {
             Device = device;
             BroadcastToken = new CancellationTokenSource();
@@ -39,11 +39,6 @@ namespace BlitzSniffer.Network.Searcher
             {
                 new Thread(BroadcastBrowseRequest).Start();
             }
-        }
-
-        public static void Initialize(ICaptureDevice device)
-        {
-            Instance = new LanSessionSearcher(device);
         }
 
         public override void Dispose()

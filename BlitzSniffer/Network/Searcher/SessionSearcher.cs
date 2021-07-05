@@ -4,11 +4,9 @@ using System;
 
 namespace BlitzSniffer.Network.Searcher
 {
-    abstract class SessionSearcher : IDisposable
+    public abstract class SessionSearcher : IDisposable
     {
         private static readonly ILogger LogContext = Log.ForContext(Constants.SourceContextPropertyName, "SessionSearcher");
-
-        public static SessionSearcher Instance = null;
 
         public delegate void SessionFoundHandler(object sender, SessionDataFoundArgs args);
         public event SessionFoundHandler SessionFound;

@@ -1,4 +1,5 @@
 ﻿using BlitzSniffer.Config;
+using BlitzSniffer.Network.Searcher;
 using NintendoNetcode.Pia;
 using SharpPcap;
 using SharpPcap.LibPcap;
@@ -26,7 +27,7 @@ namespace BlitzSniffer.Network.Receiver
             }
         }
 
-        public override void Start(string outputFile = null)
+        public override void Start(SessionSearcher searcher, string outputFile = null)
         {
             if (SessionType == PiaSessionType.Lan)
             {
@@ -37,7 +38,7 @@ namespace BlitzSniffer.Network.Receiver
                 Device.Filter = $"ip and udp and ip host {SnifferConfig.Instance.Snicom.IpAddress}";
             }
 
-            base.Start(outputFile);
+            base.Start(searcher, outputFile);
         }
 
     }

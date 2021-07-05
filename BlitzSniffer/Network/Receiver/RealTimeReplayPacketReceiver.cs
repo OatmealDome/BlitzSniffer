@@ -1,4 +1,5 @@
-﻿using BlitzSniffer.Util;
+﻿using BlitzSniffer.Network.Searcher;
+using BlitzSniffer.Util;
 using NintendoNetcode.Pia;
 using SharpPcap;
 using SharpPcap.LibPcap;
@@ -62,7 +63,7 @@ namespace BlitzSniffer.Network.Receiver
 
         }
 
-        public override void Start(string outputFile = null)
+        public override void Start(SessionSearcher searcher, string outputFile = null)
         {
             lock (TimevalLock)
             {
@@ -83,7 +84,7 @@ namespace BlitzSniffer.Network.Receiver
 
             Timer.Start();
 
-            base.Start(outputFile);
+            base.Start(searcher, outputFile);
         }
 
         public override void Dispose()

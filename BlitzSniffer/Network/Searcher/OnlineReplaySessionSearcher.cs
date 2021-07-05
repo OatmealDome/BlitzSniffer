@@ -11,16 +11,11 @@ namespace BlitzSniffer.Network.Searcher
 
         private ICaptureDevice Device;
 
-        private OnlineReplaySessionSearcher(ICaptureDevice device) : base()
+        public OnlineReplaySessionSearcher(ICaptureDevice device) : base()
         {
             Device = device;
 
             Device.OnPacketArrival += OnPacketArrival;
-        }
-
-        public static void Initialize(ICaptureDevice device)
-        {
-            Instance = new OnlineReplaySessionSearcher(device);
         }
 
         public override void Dispose()

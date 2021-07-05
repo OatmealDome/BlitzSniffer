@@ -226,26 +226,28 @@ namespace BlitzSniffer
                 packetReceiver = new LivePacketReceiver(sessionType, captureDevice);
             }
 
+            SessionSearcher searcher;
+
             if (sessionType == PiaSessionType.Inet)
             {
                 if (replayFile == null)
                 {
-                    SnicomSessionSearcher.Initialize();
+                    searcher = new SnicomSessionSearcher();
                 }
                 else
                 {
-                    OnlineReplaySessionSearcher.Initialize(packetReceiver.GetDevice());
+                    searcher = new OnlineReplaySessionSearcher(captureDevice);
                 }
             }
             else
             {
-                LanSessionSearcher.Initialize(packetReceiver.GetDevice());
+                searcher = new LanSessionSearcher(captureDevice);
             }
 
             Directory.CreateDirectory("PacketCaptures");
             string pcapDumpFile = Path.Combine("PacketCaptures", $"{dateTime}.pcap");
 
-            packetReceiver.Start(replayFile == null ? pcapDumpFile : null);
+            packetReceiver.Start(searcher, replayFile == null ? pcapDumpFile : null);
 
             localLogContext.Information("This session's log files are filed under \"{DateTime}\".", dateTime);
 
@@ -260,7 +262,7 @@ namespace BlitzSniffer
                 Console.ReadKey();
             }
 
-            SessionSearcher.Instance.Dispose();
+            searcher.Dispose();
 
             EventTracker.Instance.Shutdown();
 

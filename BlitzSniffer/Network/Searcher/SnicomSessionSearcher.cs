@@ -22,11 +22,6 @@ namespace BlitzSniffer.Network.Searcher
             ConnectionThread.Start();
         }
 
-        public static void Initialize()
-        {
-            Instance = new SnicomSessionSearcher();
-        }
-
         public override void Dispose()
         {
             if (!StopToken.IsCancellationRequested)
