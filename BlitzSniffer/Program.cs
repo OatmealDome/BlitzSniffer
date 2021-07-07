@@ -245,16 +245,7 @@ namespace BlitzSniffer
                 Console.ReadKey();
             }
 
-            try
-            {
-                NetworkManager.Instance.Reset();
-            }
-            catch (PlatformNotSupportedException)
-            {
-                // ICaptureDevice.Close() might throw an exception on Windows:
-                // "Thread abort not supported on this platform"
-                // Ignore this, we're shutting down anyway.
-            }
+            NetworkManager.Instance.Reset();
 
             EventTracker.Instance.Shutdown();
 

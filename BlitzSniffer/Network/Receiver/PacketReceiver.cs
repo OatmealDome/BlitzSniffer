@@ -29,7 +29,15 @@ namespace BlitzSniffer.Network.Receiver
 
         public virtual void Dispose()
         {
-            Device.Close();
+            try
+            {
+                Device.Close();
+            }
+            catch (PlatformNotSupportedException)
+            {
+                // ICaptureDevice.Close() might throw an exception on Windows:
+                // "Thread abort not supported on this platform"
+            }
         }
 
         protected virtual void OnPacketArrival(object sender, CaptureEventArgs e)
