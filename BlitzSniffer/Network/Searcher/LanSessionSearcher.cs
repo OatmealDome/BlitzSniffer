@@ -1,3 +1,4 @@
+using BlitzSniffer.Network.Manager;
 using BlitzSniffer.Util;
 using NintendoNetcode.Pia;
 using NintendoNetcode.Pia.Lan.Content.Browse;
@@ -33,7 +34,7 @@ namespace BlitzSniffer.Network.Searcher
             BroadcastToken = new CancellationTokenSource();
             QueryCount = 0;
 
-            Device.OnPacketArrival += OnPacketArrival;
+            NetworkManager.Instance.PacketReceived += OnPacketArrival;
 
             if (device is LibPcapLiveDevice)
             {
@@ -49,11 +50,9 @@ namespace BlitzSniffer.Network.Searcher
             }
         }
 
-        protected virtual void OnPacketArrival(object sender, CaptureEventArgs e)
+        protected virtual void OnPacketArrival(object sender, PacketReceivedEventArgs e)
         {
-            Packet packet = Packet.ParsePacket(e.Packet.LinkLayerType, e.Packet.Data);
-
-            UdpPacket udpPacket = packet.Extract<UdpPacket>();
+            UdpPacket udpPacket = e.UdpPacket;
             if (udpPacket.DestinationPort != 30000)
             {
                 return;

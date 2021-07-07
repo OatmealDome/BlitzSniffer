@@ -48,7 +48,7 @@ namespace BlitzSniffer.Network.Receiver
 
         private object TimevalLock = new object();
 
-        public RealTimeReplayPacketReceiver(PiaSessionType sessionType, string path, int offset) : base(sessionType, path)
+        public RealTimeReplayPacketReceiver(string path, int offset) : base(path)
         {
             ReplayPath = path;
             RealTimeStartOffset = offset;
@@ -58,12 +58,12 @@ namespace BlitzSniffer.Network.Receiver
             Timer.MicroTimerElapsed += TimerElapsed;
         }
 
-        public RealTimeReplayPacketReceiver(PiaSessionType sessionType, string path) : this(sessionType, path, 0)
+        public RealTimeReplayPacketReceiver(string path) : this(path, 0)
         {
 
         }
 
-        public override void Start(SessionSearcher searcher, string outputFile = null)
+        public override void Start()
         {
             lock (TimevalLock)
             {
@@ -84,7 +84,7 @@ namespace BlitzSniffer.Network.Receiver
 
             Timer.Start();
 
-            base.Start(searcher, outputFile);
+            base.Start();
         }
 
         public override void Dispose()

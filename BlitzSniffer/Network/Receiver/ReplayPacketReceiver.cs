@@ -7,17 +7,17 @@ namespace BlitzSniffer.Network.Receiver
     // Replays the session as fast as the CPU allows it
     public class ReplayPacketReceiver : PacketReceiver
     {
-        public ReplayPacketReceiver(PiaSessionType sessionType, string path) : base(sessionType)
+        public ReplayPacketReceiver(string path) : base()
         {
             Device = new CaptureFileReaderDevice(path);
             Device.Open();
         }
 
-        public override void Start(SessionSearcher searcher, string outputFile = null)
+        public override void Start()
         {
             Device.Filter = "ip and udp";
 
-            base.Start(searcher, outputFile);
+            base.Start();
         }
 
     }

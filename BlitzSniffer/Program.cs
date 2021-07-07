@@ -17,6 +17,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Xml;
+using BlitzSniffer.Network.Manager;
 
 namespace BlitzSniffer
 {
@@ -203,53 +204,35 @@ namespace BlitzSniffer
                 sessionType = PiaSessionType.Lan;
             }
 
-            PacketReceiver packetReceiver;
+            Directory.CreateDirectory("PacketCaptures");
+            string pcapDumpFile = Path.Combine("PacketCaptures", $"{dateTime}.pcap");
+
             if (replayFile != null)
             {
                 if (replayInRealTime)
                 {
-                    packetReceiver = new RealTimeReplayPacketReceiver(sessionType, replayFile.FullName, realTimeStartOffset);
+                    NetworkManager.Instance.LoadRealTimeReplay(sessionType, replayFile.FullName, realTimeStartOffset);
                 }
                 else
                 {
-                    packetReceiver = new ReplayPacketReceiver(sessionType, replayFile.FullName);
-                }
-
-                if (!autoStartReplay)
-                {
-                    localLogContext.Information("Press return to start the replay.");
-                    Console.ReadLine();
+                    NetworkManager.Instance.LoadReplay(sessionType, replayFile.FullName);
                 }
             }
             else
             {
-                packetReceiver = new LivePacketReceiver(sessionType, captureDevice);
+                NetworkManager.Instance.LoadLive(sessionType, captureDevice, pcapDumpFile);
             }
-
-            SessionSearcher searcher;
-
-            if (sessionType == PiaSessionType.Inet)
-            {
-                if (replayFile == null)
-                {
-                    searcher = new SnicomSessionSearcher();
-                }
-                else
-                {
-                    searcher = new OnlineReplaySessionSearcher(captureDevice);
-                }
-            }
-            else
-            {
-                searcher = new LanSessionSearcher(captureDevice);
-            }
-
-            Directory.CreateDirectory("PacketCaptures");
-            string pcapDumpFile = Path.Combine("PacketCaptures", $"{dateTime}.pcap");
-
-            packetReceiver.Start(searcher, replayFile == null ? pcapDumpFile : null);
 
             localLogContext.Information("This session's log files are filed under \"{DateTime}\".", dateTime);
+
+            if (replayFile != null)
+            {
+                localLogContext.Information("Press return to start the replay.");
+
+                Console.ReadKey();
+            }
+
+            NetworkManager.Instance.Start();
 
             if (!consoleOnly)
             {
@@ -262,22 +245,21 @@ namespace BlitzSniffer
                 Console.ReadKey();
             }
 
-            searcher.Dispose();
+            try
+            {
+                NetworkManager.Instance.Reset();
+            }
+            catch (PlatformNotSupportedException)
+            {
+                // ICaptureDevice.Close() might throw an exception on Windows:
+                // "Thread abort not supported on this platform"
+                // Ignore this, we're shutting down anyway.
+            }
 
             EventTracker.Instance.Shutdown();
 
             Log.CloseAndFlush();
 
-            try
-            {
-                packetReceiver.Dispose();
-            }
-            catch (PlatformNotSupportedException)
-            {
-                // Forcefully exit - ICaptureDevice.Close() might throw an exception on Windows
-                // "Thread abort not supported on this platform"
-                Environment.Exit(0);
-            }
         }
 
         static ICaptureDevice GetCaptureDevice()

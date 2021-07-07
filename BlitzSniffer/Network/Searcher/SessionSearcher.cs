@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using BlitzSniffer.Network.Manager;
+using Serilog;
 using Serilog.Core;
 using System;
 
@@ -7,9 +8,6 @@ namespace BlitzSniffer.Network.Searcher
     public abstract class SessionSearcher : IDisposable
     {
         private static readonly ILogger LogContext = Log.ForContext(Constants.SourceContextPropertyName, "SessionSearcher");
-
-        public delegate void SessionDataFoundHandler(object sender, SessionDataFoundEventArgs args);
-        public event SessionDataFoundHandler SessionDataFound;
 
         protected SessionSearcher()
         {
@@ -20,7 +18,7 @@ namespace BlitzSniffer.Network.Searcher
 
         protected void NotifySessionDataFound(SessionFoundDataType type, byte[] data)
         {
-            SessionDataFound?.Invoke(this, new SessionDataFoundEventArgs(type, data));
+            NetworkManager.Instance.HandleSessionDataReceived(new SessionDataFoundEventArgs(type, data));
 
             if (type == SessionFoundDataType.Key)
             {

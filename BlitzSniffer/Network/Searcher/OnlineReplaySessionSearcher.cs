@@ -1,5 +1,4 @@
-﻿using PacketDotNet;
-using SharpPcap;
+﻿using BlitzSniffer.Network.Manager;
 using Syroot.BinaryData;
 using System.IO;
 
@@ -9,31 +8,24 @@ namespace BlitzSniffer.Network.Searcher
     {
         public static readonly uint PACKET_MAGIC = 0x534A3445;
 
-        private ICaptureDevice Device;
-
-        public OnlineReplaySessionSearcher(ICaptureDevice device) : base()
+        public OnlineReplaySessionSearcher() : base()
         {
-            Device = device;
-
-            Device.OnPacketArrival += OnPacketArrival;
+            NetworkManager.Instance.PacketReceived += HandlePacketReceived;
         }
 
         public override void Dispose()
         {
-            Device.OnPacketArrival -= OnPacketArrival;
+            NetworkManager.Instance.PacketReceived -= HandlePacketReceived;
         }
 
-        protected virtual void OnPacketArrival(object sender, CaptureEventArgs e)
+        protected virtual void HandlePacketReceived(object sender, PacketReceivedEventArgs e)
         {
-            Packet packet = Packet.ParsePacket(e.Packet.LinkLayerType, e.Packet.Data);
-
-            UdpPacket udpPacket = packet.Extract<UdpPacket>();
-            if (udpPacket.DestinationPort != 13390)
+            if (e.UdpPacket.DestinationPort != 13390)
             {
                 return;
             }
 
-            using (MemoryStream memoryStream = new MemoryStream(udpPacket.PayloadData))
+            using (MemoryStream memoryStream = new MemoryStream(e.UdpPacket.PayloadData))
             using (BinaryDataReader reader = new BinaryDataReader(memoryStream))
             {
                 reader.ByteOrder = ByteOrder.BigEndian;
