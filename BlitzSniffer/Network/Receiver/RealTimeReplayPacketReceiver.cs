@@ -3,6 +3,7 @@ using BlitzSniffer.Util;
 using NintendoNetcode.Pia;
 using SharpPcap;
 using SharpPcap.LibPcap;
+using System;
 using System.Threading;
 
 namespace BlitzSniffer.Network.Receiver
@@ -46,6 +47,12 @@ namespace BlitzSniffer.Network.Receiver
             set;
         }
 
+        private CancellationTokenSource TokenSource
+        {
+            get;
+            set;
+        }
+
         private object TimevalLock = new object();
 
         public RealTimeReplayPacketReceiver(string path, int offset) : base(path)
@@ -53,6 +60,7 @@ namespace BlitzSniffer.Network.Receiver
             ReplayPath = path;
             RealTimeStartOffset = offset;
             ContinueSignal = new ManualResetEvent(false);
+            TokenSource = new CancellationTokenSource();
 
             Timer = new MicroTimer(1000);
             Timer.MicroTimerElapsed += TimerElapsed;
@@ -95,8 +103,8 @@ namespace BlitzSniffer.Network.Receiver
             {
                 Timer.Abort();
             }
-            
-            ContinueSignal.Dispose();
+
+            TokenSource.Cancel();
         }
 
         private void TimerElapsed(object sender, MicroTimerEventArgs e)
@@ -138,7 +146,14 @@ namespace BlitzSniffer.Network.Receiver
 
             if (shouldWait)
             {
-                ContinueSignal.WaitOne();
+                try
+                {
+                    WaitHandle.WaitAny(new WaitHandle[] { TokenSource.Token.WaitHandle, ContinueSignal });
+                }
+                catch (ObjectDisposedException)
+                {
+                    ;
+                }
 
                 lock (TimevalLock)
                 {
