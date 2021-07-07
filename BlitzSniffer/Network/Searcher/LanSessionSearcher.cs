@@ -67,9 +67,9 @@ namespace BlitzSniffer.Network.Searcher
                 {
                     LanContentBrowseReply browseReply = new LanContentBrowseReply(reader);
 
-                    if (browseReply.SessionInfo.AppCommunicationVersion != int.Parse(Program.BLITZ_SUPPORTED_VERSION) && !DidPrintVersionWarning)
+                    if (!Program.BLITZ_SUPPORTED_VERSIONS.Contains(browseReply.SessionInfo.AppCommunicationVersion.ToString()) && !DidPrintVersionWarning)
                     {
-                        LogContext.Warning("AppVersion mismatch - session is running {Version}, expected {SupportedVersion}", browseReply.SessionInfo.AppCommunicationVersion, Program.BLITZ_SUPPORTED_VERSION);
+                        LogContext.Warning("AppVersion mismatch - session is running {Version}, expected any of {SupportedVersions}", browseReply.SessionInfo.AppCommunicationVersion, string.Join(',', Program.BLITZ_SUPPORTED_VERSIONS));
 
                         DidPrintVersionWarning = true;
                     }

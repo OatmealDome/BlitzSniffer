@@ -18,6 +18,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using BlitzSniffer.Network.Manager;
+using System.Linq;
 
 namespace BlitzSniffer
 {
@@ -25,7 +26,7 @@ namespace BlitzSniffer
     {
         private static readonly string LOG_FORMAT = "[{Timestamp:HH:mm:ss} {Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
 
-        public static readonly string BLITZ_SUPPORTED_VERSION = "64"; // string because XML
+        public static readonly string[] BLITZ_SUPPORTED_VERSIONS = new string[] { "64", "65" }; // string because XML
 
         /// <summary>
         /// Sniffs Splatoon 2 LAN sessions.
@@ -178,7 +179,7 @@ namespace BlitzSniffer
             }
 
             XmlNode node = gameConfigDocument.SelectSingleNode("//parameter[@name='AppVersion']");
-            if (node == null || node.Attributes.GetNamedItem("defaultValue").Value != BLITZ_SUPPORTED_VERSION)
+            if (node == null || !BLITZ_SUPPORTED_VERSIONS.Contains(node.Attributes.GetNamedItem("defaultValue").Value))
             {
                 localLogContext.Error("Incompatible Splatoon 2 version found. Please upgrade to the latest BlitzSniffer.");
 
