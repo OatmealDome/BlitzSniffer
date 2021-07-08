@@ -27,7 +27,7 @@ namespace BlitzSniffer.Network.Receiver
 
         public override void Start()
         {
-            Device.Filter = "ip and udp and (udp portrange 49150-49160 or udp port 30000)";
+            Device.Filter = "ip and udp";
 
             base.Start();
         }
