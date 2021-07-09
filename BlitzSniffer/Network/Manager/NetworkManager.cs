@@ -4,6 +4,7 @@ using BlitzSniffer.Network.Searcher;
 using NintendoNetcode.Pia;
 using PacketDotNet;
 using SharpPcap;
+using System;
 
 namespace BlitzSniffer.Network.Manager
 {
@@ -149,6 +150,28 @@ namespace BlitzSniffer.Network.Manager
             Receiver.Start();
 
             Started = true;
+        }
+
+        // Replay
+
+        public PosixTimeval GetFirstPacketTimeReplay()
+        {
+            if (!IsReplayLoaded())
+            {
+                throw new Exception("Can't get first packet time of non-replay device");
+            }
+
+            return (Receiver as ReplayPacketReceiver).FirstPacketTimeval;
+        }
+
+        public PosixTimeval GetTotalReplayLength()
+        {
+            if (!IsReplayLoaded())
+            {
+                throw new Exception("Can't get length of non-replay device");
+            }
+
+            return (Receiver as ReplayPacketReceiver).TotalLengthTimeval;
         }
 
         // Utility
