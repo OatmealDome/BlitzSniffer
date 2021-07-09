@@ -137,7 +137,7 @@ namespace BlitzSniffer.Network.Manager
             Load(type, new RealTimeReplayPacketReceiver(file, offset), true);
         }
         
-        // Start
+        // Controls
 
         public void Start()
         {
@@ -149,6 +149,23 @@ namespace BlitzSniffer.Network.Manager
             Receiver.Start();
 
             Started = true;
+        }
+
+        // Utility
+
+        public bool IsLiveLoaded()
+        {
+            return Receiver is LivePacketReceiver;
+        }
+
+        public bool IsReplayLoaded()
+        {
+            return Receiver is ReplayPacketReceiver;
+        }
+
+        public bool IsRealTimeReplayLoaded()
+        {
+            return Receiver is RealTimeReplayPacketReceiver;
         }
 
     }
