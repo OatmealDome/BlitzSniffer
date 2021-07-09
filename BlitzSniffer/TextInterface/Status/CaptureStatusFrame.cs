@@ -18,7 +18,7 @@ namespace BlitzSniffer.TextInterface.Status
                 Y = 0,
                 Width = Dim.Fill(),
                 Height = 1,
-                Fraction = 0.25f,
+                Fraction = 0.0f,
                 ColorScheme = Colors.Error
             };
 
