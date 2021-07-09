@@ -75,19 +75,7 @@ namespace BlitzSniffer.Network.Receiver
         {
             lock (TimevalLock)
             {
-                // This is a terrible hack. We need the first packet to obtain Timeval, but
-                // there is no way to peek the first packet or rewind a CaptureFileReaderDevice.
-                // So, we make another device for temporary usage and use that to read the 
-                // capture's first packet, allowing us to leave the original device alone.
-                ICaptureDevice temporaryDevice = new CaptureFileReaderDevice(ReplayPath);
-
-                RawCapture firstPacket = temporaryDevice.GetNextPacket();
-                Timeval = firstPacket.Timeval;
-
-                // May take a few moments to catch up, but it'll get there eventually
-                Timeval.Seconds += (ulong)RealTimeStartOffset;
-
-                temporaryDevice.Close();
+                Timeval = new PosixTimeval(FirstPacketTimeval.Seconds + (ulong)RealTimeStartOffset, FirstPacketTimeval.MicroSeconds);
             }
 
             Timer.Start();
