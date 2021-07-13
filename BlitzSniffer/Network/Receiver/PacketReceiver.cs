@@ -29,6 +29,8 @@ namespace BlitzSniffer.Network.Receiver
 
         public virtual void Dispose()
         {
+            Device.OnPacketArrival -= OnPacketArrival;
+
             try
             {
                 Device.Close();
