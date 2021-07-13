@@ -1,10 +1,13 @@
 ﻿using BlitzSniffer.Network.Netcode;
+using BlitzSniffer.Network.RealTimeReplay;
 using BlitzSniffer.Network.Receiver;
 using BlitzSniffer.Network.Searcher;
 using NintendoNetcode.Pia;
 using PacketDotNet;
 using SharpPcap;
 using System;
+using System.IO;
+using System.Text.Json;
 
 namespace BlitzSniffer.Network.Manager
 {
@@ -30,6 +33,7 @@ namespace BlitzSniffer.Network.Manager
         private SessionSearcher Searcher;
         private PiaSession Session;
         private LiveWriteOut WriteOut;
+        private VideoSynchronizer VideoSync;
 
         private bool Started;
 
@@ -66,6 +70,12 @@ namespace BlitzSniffer.Network.Manager
         public void Reset()
         {
             Started = false;
+
+            if (VideoSync != null)
+            {
+                VideoSync.Dispose();
+                VideoSync = null;
+            }
 
             if (Session != null)
             {
@@ -137,7 +147,16 @@ namespace BlitzSniffer.Network.Manager
         {
             Load(type, new RealTimeReplayPacketReceiver(file, offset), true);
         }
-        
+
+        public void LoadRealTimeVideoSynchronizedReplay(PiaSessionType type, string file, int offset = 0)
+        {
+            VideoSynchronizedReplay replayConfig = JsonSerializer.Deserialize<VideoSynchronizedReplay>(File.ReadAllText(file));
+            
+            Load(type, new RealTimeReplayPacketReceiver(replayConfig.CaptureFile, offset), true);
+
+            VideoSync = new VideoSynchronizer(replayConfig);
+        }
+
         // Controls
 
         public void Start()
