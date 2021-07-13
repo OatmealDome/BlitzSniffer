@@ -61,6 +61,11 @@ namespace BlitzSniffer.Network.Receiver
             RealTimeStartOffset = offset;
 
             SetObjects();
+            
+            lock (TimevalLock)
+            {
+                Timeval = new PosixTimeval(FirstPacketTimeval.Seconds + (ulong)RealTimeStartOffset, FirstPacketTimeval.MicroSeconds);
+            }
         }
 
         public RealTimeReplayPacketReceiver(string path) : this(path, 0)
@@ -78,6 +83,8 @@ namespace BlitzSniffer.Network.Receiver
             Timer.MicroTimerElapsed += TimerElapsed;
             }
 
+        public override void Start()
+        {
             Timer.Start();
 
             base.Start();
