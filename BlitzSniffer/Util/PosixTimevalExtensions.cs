@@ -34,12 +34,22 @@ namespace BlitzSniffer.Util
         // Tracking: https://github.com/dotnet/csharplang/issues/192
         public static PosixTimeval Add(this PosixTimeval a, PosixTimeval b)
         {
-            return a.Add(b.ToTotalMicroseconds());
+            return a.Add(b.ToTotalMicroseconds(), false);
         }
 
         public static PosixTimeval Subtract(this PosixTimeval a, PosixTimeval b)
         {
             return a.Add(b.ToTotalMicroseconds(), true);
+        }
+
+        public static PosixTimeval Add(this PosixTimeval a, ulong b)
+        {
+            return a.Add(b, false);
+        }
+
+        public static PosixTimeval Subtract(this PosixTimeval a, ulong b)
+        {
+            return a.Add(b, true);
         }
 
     }
