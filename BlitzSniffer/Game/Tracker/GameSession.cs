@@ -132,6 +132,9 @@ namespace BlitzSniffer.Game.Tracker
                 SetupEventCts.Cancel();
 
                 SetupEventTask.Wait();
+
+                SetupEventCts.Dispose();
+                SetupEventCts = new CancellationTokenSource();
             }
 
             SetupEventCountdown.Reset();
