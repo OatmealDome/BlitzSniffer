@@ -19,6 +19,7 @@ using System.Text;
 using System.Xml;
 using BlitzSniffer.Network.Manager;
 using System.Linq;
+using LibVLCSharp.Shared;
 
 namespace BlitzSniffer
 {
@@ -155,6 +156,9 @@ namespace BlitzSniffer
 
             localLogContext.Information("BlitzSniffer {Version} ({BuildType}) for {Licensee}", ThisAssembly.AssemblyFileVersion, buildType, licensee);
             localLogContext.Information("Copyright © 2020 - 2021 OatmealDome");
+
+            // LibVLC initialization
+            Core.Initialize();
 
 #if DEBUG
             if (useRom)
