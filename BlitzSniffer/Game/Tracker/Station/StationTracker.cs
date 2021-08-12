@@ -11,7 +11,7 @@ namespace BlitzSniffer.Game.Tracker.Station
 {
     class StationTracker
     {
-        private readonly Dictionary<ulong, Station> Stations;
+        private Dictionary<ulong, Station> Stations;
 
         public byte LastJointSeqState
         {
@@ -33,10 +33,7 @@ namespace BlitzSniffer.Game.Tracker.Station
 
         public StationTracker()
         {
-            Stations = new Dictionary<ulong, Station>();
-            LastJointSeqState = 0;
-            LastMasterSeqState = 0;
-            ActivePlayerCount = 0;
+            Reset();
 
             CloneHolder holder = CloneHolder.Instance;
             holder.CloneChanged += HandleStationInfo;
@@ -50,6 +47,14 @@ namespace BlitzSniffer.Game.Tracker.Station
             }
 
              EnlHolder.Instance.SystemInfoReceived += HandleEnlSystemInfo;
+        }
+
+        public void Reset()
+        {
+            Stations = new Dictionary<ulong, Station>();
+            LastJointSeqState = 0;
+            LastMasterSeqState = 0;
+            ActivePlayerCount = 0;
         }
 
         public Station GetStationForSsid(ulong sourceId)
