@@ -91,5 +91,13 @@ namespace BlitzSniffer.Network.Netcode.Clone
             ClockChanged(this, new ClockChangedEventArgs(clock));
         }
 
+        public void Reset()
+        {
+            foreach (uint cloneId in Clones.Keys)
+            {
+                Clones[cloneId] = new Dictionary<uint, byte[]>();
+            }
+        }
+
     }
 }
