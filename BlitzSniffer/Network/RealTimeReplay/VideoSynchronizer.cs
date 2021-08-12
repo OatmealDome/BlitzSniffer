@@ -1,4 +1,4 @@
-﻿using BlitzSniffer.Network.Manager;
+using BlitzSniffer.Network.Manager;
 using BlitzSniffer.Util;
 using LibVLCSharp.Shared;
 using SharpPcap;
@@ -16,7 +16,7 @@ namespace BlitzSniffer.Network.RealTimeReplay
         private MediaPlayer Player;
 
         private PosixTimeval CaptureSyncPoint;
-        private PosixTimeval CaptureStartSyncPoint;
+        private ulong CaptureStartSyncPoint;
         private long VideoStartSyncPoint;
 
         private bool HasDoneInitialPause;
@@ -57,7 +57,7 @@ namespace BlitzSniffer.Network.RealTimeReplay
                 return;
             }
 
-            if (CaptureStartSyncPoint <= args.RawCapture.Timeval)
+                if (CaptureStartSyncPoint <= args.RawCapture.Timeval.ToTotalMicroseconds())
             {
                 Player.Play();
                 Player.Time = VideoStartSyncPoint;
@@ -124,7 +124,7 @@ namespace BlitzSniffer.Network.RealTimeReplay
             }
             while (videoPoint < 0);
 
-            CaptureStartSyncPoint = capturePoint;
+            CaptureStartSyncPoint = capturePoint.ToTotalMicroseconds();
             VideoStartSyncPoint = videoPoint / 1000;
 
             device.Close();
