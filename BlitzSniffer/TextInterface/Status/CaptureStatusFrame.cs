@@ -22,6 +22,8 @@ namespace BlitzSniffer.TextInterface.Status
                 ColorScheme = Colors.Error
             };
 
+            CaptureProgressBar.MouseClick += HandleBarClicked;
+
             this.Add(CaptureProgressBar);
 
             TimeLabel = new Label()
@@ -36,6 +38,19 @@ namespace BlitzSniffer.TextInterface.Status
             this.Add(TimeLabel);
 
             NetworkManager.Instance.PacketReceived += HandlePacketReceived;
+        }
+
+        private void HandleBarClicked(MouseEventArgs args)
+        {
+            if (args.MouseEvent.Flags != MouseFlags.Button1Released)
+            {
+                return;
+            }
+
+            double fraction = (float)args.MouseEvent.X / CaptureProgressBar.Frame.Width;
+            ulong microseconds = (ulong)(NetworkManager.Instance.GetTotalReplayLength().ToTotalMicroseconds() * fraction);
+
+            NetworkManager.Instance.SeekReplay(microseconds);
         }
 
         private void HandlePacketReceived(object sender, PacketReceivedEventArgs args)
