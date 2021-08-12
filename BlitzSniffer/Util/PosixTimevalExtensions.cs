@@ -11,6 +11,11 @@ namespace BlitzSniffer.Util
             return (timeval.Seconds * ONE_SECOND_IN_MICROSECONDS) + timeval.MicroSeconds;
         }
 
+        public static PosixTimeval ToPosixTimeval(this ulong microseconds)
+        {
+            return new PosixTimeval(microseconds / ONE_SECOND_IN_MICROSECONDS, microseconds % ONE_SECOND_IN_MICROSECONDS);
+        }
+
         private static PosixTimeval Add(this PosixTimeval a, ulong microSeconds, bool minus = false)
         {
             ulong aMicroseconds = a.ToTotalMicroseconds();
