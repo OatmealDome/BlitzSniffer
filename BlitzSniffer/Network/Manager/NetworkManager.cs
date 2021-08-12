@@ -1,7 +1,11 @@
-﻿using BlitzSniffer.Network.Netcode;
+﻿using BlitzSniffer.Game.Tracker;
+using BlitzSniffer.Game.Tracker.Station;
+using BlitzSniffer.Network.Netcode;
+using BlitzSniffer.Network.Netcode.Clone;
 using BlitzSniffer.Network.RealTimeReplay;
 using BlitzSniffer.Network.Receiver;
 using BlitzSniffer.Network.Searcher;
+using BlitzSniffer.Util;
 using NintendoNetcode.Pia;
 using PacketDotNet;
 using SharpPcap;
@@ -151,10 +155,13 @@ namespace BlitzSniffer.Network.Manager
         public void LoadRealTimeVideoSynchronizedReplay(PiaSessionType type, string file, int offset = 0)
         {
             VideoSynchronizedReplay replayConfig = JsonSerializer.Deserialize<VideoSynchronizedReplay>(File.ReadAllText(file));
-            
-            Load(type, new RealTimeReplayPacketReceiver(replayConfig.CaptureFile, offset), true);
+            RealTimeReplayPacketReceiver receiver = new RealTimeReplayPacketReceiver(replayConfig.CaptureFile, offset);
+
+            Load(type, receiver, true);
 
             VideoSync = new VideoSynchronizer(replayConfig);
+
+            VideoSync.Seek(GetFirstPacketTimeReplay(), receiver.GetTemporaryReplayDevice());
         }
 
         // Controls
@@ -172,6 +179,59 @@ namespace BlitzSniffer.Network.Manager
         }
 
         // Replay
+
+        public void SeekReplay(ulong microseconds)
+        {
+            if (!IsRealTimeReplayLoaded())
+            {
+                throw new Exception("Can't seek a regular replay or live device");
+            }
+
+            RealTimeReplayPacketReceiver realTimeReceiver = Receiver as RealTimeReplayPacketReceiver;
+            ICaptureDevice device = realTimeReceiver.GetTemporaryReplayDevice();
+
+            PosixTimeval equivalentTimeval = (microseconds + realTimeReceiver.FirstPacketTimeval.ToTotalMicroseconds()).ToPosixTimeval();
+            PosixTimeval targetTimeval;
+            
+            // Find first packet after the equivalent timeval
+            do
+            {
+                RawCapture capture = device.GetNextPacket();
+
+                if (capture == null)
+                {
+                    throw new Exception("Can't find target timeval for seek target");
+                }
+
+                targetTimeval = capture.Timeval;
+            }
+            while (targetTimeval < equivalentTimeval);
+
+            realTimeReceiver.Seek(equivalentTimeval);
+
+            device.Close();
+
+            if (VideoSync != null)
+            {
+                VideoSync.Seek(equivalentTimeval, device);
+            }
+
+            // Reset game netcode handlers
+            if (Session != null)
+            {
+                Session.Dispose();
+                Session = new PiaSession(SessionType);
+            }
+
+            GameSession.Instance.Reset();
+
+            GameSession.Instance.StationTracker.Reset();
+
+            CloneHolder.Instance.Reset();
+
+            // Restart the receiver
+            realTimeReceiver.Start();
+        }
 
         public PosixTimeval GetFirstPacketTimeReplay()
         {
