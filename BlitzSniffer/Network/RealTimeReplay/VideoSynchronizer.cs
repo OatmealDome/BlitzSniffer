@@ -1,4 +1,4 @@
-using BlitzSniffer.Network.Manager;
+﻿using BlitzSniffer.Network.Manager;
 using BlitzSniffer.Util;
 using LibVLCSharp.Shared;
 using SharpPcap;
@@ -20,6 +20,9 @@ namespace BlitzSniffer.Network.RealTimeReplay
         private long VideoStartSyncPoint;
 
         private bool HasDoneInitialPause;
+        private bool IsPaused;
+
+        private object OperationLock = new object();
 
         public VideoSynchronizer(VideoSynchronizedReplay config)
         {
@@ -31,9 +34,8 @@ namespace BlitzSniffer.Network.RealTimeReplay
 
             CaptureSyncPoint = new PosixTimeval(config.CaptureSyncSeconds, config.CaptureSyncMicroSeconds);
 
-            Seek(NetworkManager.Instance.GetFirstPacketTimeReplay());
-
             HasDoneInitialPause = false;
+            IsPaused = false;
 
             Player.Playing += HandlePlayerPlaying;
             Player.Play();
@@ -50,17 +52,26 @@ namespace BlitzSniffer.Network.RealTimeReplay
             Vlc.Dispose();
         }
 
+        private void SetPause(bool paused)
+        {
+            IsPaused = paused;
+            Player.SetPause(paused);
+        }
+
         private void HandlePacketReceived(object sender, PacketReceivedEventArgs args)
         {
-            if (Player.IsPlaying)
+            lock (OperationLock)
             {
-                return;
-            }
+                if (!IsPaused)
+                {
+                    return;
+                }
 
                 if (CaptureStartSyncPoint <= args.RawCapture.Timeval.ToTotalMicroseconds())
-            {
-                Player.Play();
-                Player.Time = VideoStartSyncPoint;
+                {
+                    SetPause(false);
+                    Player.Time = VideoStartSyncPoint;
+                }
             }
         }
 
@@ -71,63 +82,64 @@ namespace BlitzSniffer.Network.RealTimeReplay
                 return;
             }
 
-            Player.Pause();
-
-            // We can only fetch the media size after Play() is first called.
-            uint mediaWidth = 0;
-            uint mediaHeight = 0;
-            bool result = Player.Size(0, ref mediaWidth, ref mediaHeight);
-
-            if (!result)
+            lock (OperationLock)
             {
-                throw new Exception("Unable to fetch media size");
+                SetPause(true);
+
+                // We can only fetch the media size after Play() is first called.
+                uint mediaWidth = 0;
+                uint mediaHeight = 0;
+                bool result = Player.Size(0, ref mediaWidth, ref mediaHeight);
+
+                if (!result)
+                {
+                    throw new Exception("Unable to fetch media size");
+                }
+
+                // Calculate scale for 960x540 (assuming 16:9 video)
+                Player.Scale = 960.0f / mediaWidth;
+
+                HasDoneInitialPause = true;
             }
-
-            // Calculate scale for 960x540 (assuming 16:9 video)
-            Player.Scale = 960.0f / mediaWidth;
-
-            HasDoneInitialPause = true;
         }
 
-        public void Seek(PosixTimeval targetTimeval)
+        public void Seek(PosixTimeval targetTimeval, ICaptureDevice device)
         {
-            ICaptureDevice device = new CaptureFileReaderDevice(Config.CaptureFile);
-
-            // Seek to this packet in the CaptureFileReaderDevice
-            while (device.GetNextPacket().Timeval != targetTimeval)
+            lock (OperationLock)
             {
-                ;
-            }
-
-            PosixTimeval capturePoint = null;
-            long videoPoint;
-
-            do
-            {
-                if (capturePoint == null)
+                if (!IsPaused)
                 {
-                    capturePoint = targetTimeval;
+                    SetPause(true);
                 }
-                else
-                {
-                    RawCapture nextPacket = device.GetNextPacket();
 
-                    if (nextPacket == null)
+                PosixTimeval capturePoint = null;
+                long videoPoint;
+
+                do
+                {
+                    if (capturePoint == null)
                     {
-                        throw new Exception("Can't seek to this point");
+                        capturePoint = targetTimeval;
+                    }
+                    else
+                    {
+                        RawCapture nextPacket = device.GetNextPacket();
+
+                        if (nextPacket == null)
+                        {
+                            throw new Exception("Can't seek to this point");
+                        }
+
+                        capturePoint = nextPacket.Timeval;
                     }
 
-                    capturePoint = nextPacket.Timeval;
+                    videoPoint = (Config.VideoSyncTime * 1000) - ((long)CaptureSyncPoint.ToTotalMicroseconds() - (long)capturePoint.ToTotalMicroseconds());
                 }
+                while (videoPoint < 0);
 
-                videoPoint = (Config.VideoSyncTime * 1000) - ((long)CaptureSyncPoint.ToTotalMicroseconds() - (long)capturePoint.ToTotalMicroseconds());
+                CaptureStartSyncPoint = capturePoint.ToTotalMicroseconds();
+                VideoStartSyncPoint = videoPoint / 1000;
             }
-            while (videoPoint < 0);
-
-            CaptureStartSyncPoint = capturePoint.ToTotalMicroseconds();
-            VideoStartSyncPoint = videoPoint / 1000;
-
-            device.Close();
         }
 
     }
