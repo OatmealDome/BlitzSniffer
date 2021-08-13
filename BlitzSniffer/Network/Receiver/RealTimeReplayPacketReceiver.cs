@@ -1,4 +1,4 @@
-﻿using BlitzSniffer.Network.Searcher;
+using BlitzSniffer.Network.Searcher;
 using BlitzSniffer.Util;
 using NintendoNetcode.Pia;
 using SharpPcap;
@@ -18,12 +18,6 @@ namespace BlitzSniffer.Network.Receiver
         }
 
         private MicroTimer Timer
-        {
-            get;
-            set;
-        }
-
-        private int RealTimeStartOffset
         {
             get;
             set;
@@ -56,16 +50,15 @@ namespace BlitzSniffer.Network.Receiver
         private object TimevalLock = new object();
         private object ProcessingLock = new object();
 
-        public RealTimeReplayPacketReceiver(string path, int offset) : base(path)
+        public RealTimeReplayPacketReceiver(string path, ulong microsecondsOffset) : base(path)
         {
             ReplayPath = path;
-            RealTimeStartOffset = offset;
 
             SetObjects();
             
             lock (TimevalLock)
             {
-                Timeval = new PosixTimeval(FirstPacketTimeval.Seconds + (ulong)RealTimeStartOffset, FirstPacketTimeval.MicroSeconds);
+                Timeval = FirstPacketTimeval.Add(microsecondsOffset);
             }
         }
 

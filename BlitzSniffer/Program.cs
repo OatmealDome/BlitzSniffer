@@ -217,13 +217,15 @@ namespace BlitzSniffer
             {
                 if (replayInRealTime)
                 {
+                    ulong microsecondsOffset = (ulong)realTimeStartOffset * PosixTimevalExtensions.ONE_SECOND_IN_MICROSECONDS;
+
                     if (videoReplay)
                     {
-                        NetworkManager.Instance.LoadRealTimeVideoSynchronizedReplay(sessionType, replayFile.FullName, realTimeStartOffset);
+                        NetworkManager.Instance.LoadRealTimeVideoSynchronizedReplay(sessionType, replayFile.FullName, microsecondsOffset);
                     }
                     else
                     {
-                        NetworkManager.Instance.LoadRealTimeReplay(sessionType, replayFile.FullName, realTimeStartOffset);
+                        NetworkManager.Instance.LoadRealTimeReplay(sessionType, replayFile.FullName, microsecondsOffset);
                     }
                 }
                 else

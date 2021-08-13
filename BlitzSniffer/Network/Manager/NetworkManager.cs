@@ -1,4 +1,4 @@
-﻿using BlitzSniffer.Game.Tracker;
+using BlitzSniffer.Game.Tracker;
 using BlitzSniffer.Game.Tracker.Station;
 using BlitzSniffer.Network.Netcode;
 using BlitzSniffer.Network.Netcode.Clone;
@@ -147,12 +147,12 @@ namespace BlitzSniffer.Network.Manager
             Load(type, new ReplayPacketReceiver(file), true);
         }
 
-        public void LoadRealTimeReplay(PiaSessionType type, string file, int offset = 0)
+        public void LoadRealTimeReplay(PiaSessionType type, string file, ulong offset = 0)
         {
             Load(type, new RealTimeReplayPacketReceiver(file, offset), true);
         }
 
-        public void LoadRealTimeVideoSynchronizedReplay(PiaSessionType type, string file, int offset = 0)
+        public void LoadRealTimeVideoSynchronizedReplay(PiaSessionType type, string file, ulong offset = 0)
         {
             VideoSynchronizedReplay replayConfig = JsonSerializer.Deserialize<VideoSynchronizedReplay>(File.ReadAllText(file));
             RealTimeReplayPacketReceiver receiver = new RealTimeReplayPacketReceiver(replayConfig.CaptureFile, offset);
