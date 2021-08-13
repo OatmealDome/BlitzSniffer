@@ -57,6 +57,14 @@ namespace BlitzSniffer.Network.Receiver
             }
         }
 
+        public RealTimeReplayPacketReceiver(string path, PosixTimeval startTimeval) : this(path)
+        {
+            lock (TimevalLock)
+            {
+                Timeval = startTimeval;
+            }
+        }
+
         private RealTimeReplayPacketReceiver(string path) : base(path)
         {
             ReplayPath = path;
