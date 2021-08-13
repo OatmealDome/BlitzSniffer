@@ -225,25 +225,37 @@ namespace BlitzSniffer.Network.Manager
 
             device.Close();
 
-            // Re-create the receiver
-            Receiver.Dispose();
-            Receiver = new RealTimeReplayPacketReceiver(CaptureFile, targetTimeval);
-
-            // Reset game netcode handlers
-            if (Session != null)
+            if (targetTimeval > Receiver.LastReceivedTimeval)
             {
-                Session.Dispose();
-                Session = new PiaSession(SessionType);
+                // We can re-use the same facilities we have to do an initial skip forward in a replay to seek forwards
+                // on demand. There is no need to reset anything as we are linearly scanning through the replay.
+
+                realTimeReceiver.SeekForwards(targetTimeval);
             }
+            else
+            {
+                // It is impossible to seek backwards in a CaptureFileReaderDevice, so we must re-create our receiver.
+                // We also reset most objects handling game netcode to a state similar to that of when the program first
+                // starts up.
 
-            GameSession.Instance.Reset();
+                Receiver.Dispose();
+                Receiver = new RealTimeReplayPacketReceiver(CaptureFile, targetTimeval);
 
-            GameSession.Instance.StationTracker.Reset();
+                if (Session != null)
+                {
+                    Session.Dispose();
+                    Session = new PiaSession(SessionType);
+                }
 
-            CloneHolder.Instance.Reset();
+                GameSession.Instance.Reset();
 
-            // Start the new receiver
-            Receiver.Start();
+                GameSession.Instance.StationTracker.Reset();
+
+                CloneHolder.Instance.Reset();
+
+                // Start the new receiver
+                Receiver.Start();
+            }
         }
 
         public PosixTimeval GetFirstPacketTimeReplay()
