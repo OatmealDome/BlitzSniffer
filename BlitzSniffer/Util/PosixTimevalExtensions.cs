@@ -4,7 +4,7 @@ namespace BlitzSniffer.Util
 {
     public static class PosixTimevalExtensions
     {
-        private const ulong ONE_SECOND_IN_MICROSECONDS = 1000000;
+        public const ulong ONE_SECOND_IN_MICROSECONDS = 1000000;
 
         public static ulong ToTotalMicroseconds(this PosixTimeval timeval)
         {
