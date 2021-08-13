@@ -9,6 +9,7 @@ using BlitzSniffer.Util;
 using NintendoNetcode.Pia;
 using PacketDotNet;
 using SharpPcap;
+using SharpPcap.LibPcap;
 using System;
 using System.IO;
 using System.Text.Json;
@@ -169,7 +170,7 @@ namespace BlitzSniffer.Network.Manager
 
             VideoSync = new VideoSynchronizer(replayConfig);
 
-            VideoSync.Seek(GetFirstPacketTimeReplay(), receiver.GetTemporaryReplayDevice());
+            VideoSync.Seek(GetFirstPacketTimeReplay(), new CaptureFileReaderDevice(replayConfig.CaptureFile));
 
             CaptureFile = replayConfig.CaptureFile;
         }
@@ -198,7 +199,7 @@ namespace BlitzSniffer.Network.Manager
             }
 
             RealTimeReplayPacketReceiver realTimeReceiver = Receiver as RealTimeReplayPacketReceiver;
-            ICaptureDevice device = realTimeReceiver.GetTemporaryReplayDevice();
+            ICaptureDevice device = new CaptureFileReaderDevice(CaptureFile);
 
             PosixTimeval equivalentTimeval = (microseconds + realTimeReceiver.FirstPacketTimeval.ToTotalMicroseconds()).ToPosixTimeval();
             PosixTimeval targetTimeval;

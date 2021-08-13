@@ -11,12 +11,6 @@ namespace BlitzSniffer.Network.Receiver
     // Replays the session in real-time
     class RealTimeReplayPacketReceiver : ReplayPacketReceiver
     {
-        private string ReplayPath
-        {
-            get;
-            set;
-        }
-
         private MicroTimer Timer
         {
             get;
@@ -67,8 +61,6 @@ namespace BlitzSniffer.Network.Receiver
 
         private RealTimeReplayPacketReceiver(string path) : base(path)
         {
-            ReplayPath = path;
-
             WaitForTimeval = null;
             ContinueSignal = new ManualResetEvent(false);
             TokenSource = new CancellationTokenSource();
@@ -94,11 +86,6 @@ namespace BlitzSniffer.Network.Receiver
             }
 
             TokenSource.Cancel();
-        }
-
-        public ICaptureDevice GetTemporaryReplayDevice()
-        {
-            return new CaptureFileReaderDevice(ReplayPath);
         }
 
         private void TimerElapsed(object sender, MicroTimerEventArgs e)
