@@ -32,6 +32,8 @@ namespace BlitzSniffer.Network.Netcode.Clone
         public delegate void ClockChangedEventHandler(object sender, ClockChangedEventArgs args);
         public event ClockChangedEventHandler ClockChanged;
 
+        private object OperationLock = new object();
+
         private CloneHolder()
         {
             Clones = new Dictionary<uint, Dictionary<uint, byte[]>>();
@@ -39,24 +41,36 @@ namespace BlitzSniffer.Network.Netcode.Clone
 
         public void RegisterClone(uint id)
         {
+            // There is potential for a race condition here, but all operations that access RegisterClone
+            // and IsCloneRegistered all occur on the same thread, so it shouldn't be an issue for now.
+
             if (IsCloneRegistered(id))
             {
                 return;
             }
 
-            Clones[id] = new Dictionary<uint, byte[]>();
+            lock (OperationLock)
+            {
+                Clones[id] = new Dictionary<uint, byte[]>();
+            }
         }
 
         public bool IsCloneRegistered(uint id)
         {
-            return Clones.ContainsKey(id);
+            lock (OperationLock)
+            {
+                return Clones.ContainsKey(id);
+            }
         }
 
         public Dictionary<uint, byte[]> GetClone(uint id)
         {
-            if (Clones.TryGetValue(id, out Dictionary<uint, byte[]> cloneData))
+            lock (OperationLock)
             {
-                return cloneData;
+                if (Clones.TryGetValue(id, out Dictionary<uint, byte[]> cloneData))
+                {
+                    return cloneData;
+                }
             }
 
             throw new SnifferException($"Clone {id} not found");
@@ -64,25 +78,28 @@ namespace BlitzSniffer.Network.Netcode.Clone
 
         public void UpdateElementInClone(uint cloneId, uint elementId, byte[] data, ulong sourceId)
         {
-            if (Clones.TryGetValue(cloneId, out Dictionary<uint, byte[]> cloneData))
+            lock (OperationLock)
             {
-                bool isSimilar;
-                if (cloneData.TryGetValue(elementId, out byte[] elementData))
+                if (Clones.TryGetValue(cloneId, out Dictionary<uint, byte[]> cloneData))
                 {
-                    isSimilar = elementData.SequenceEqual(data);
+                    bool isSimilar;
+                    if (cloneData.TryGetValue(elementId, out byte[] elementData))
+                    {
+                        isSimilar = elementData.SequenceEqual(data);
+                    }
+                    else
+                    {
+                        isSimilar = false;
+                    }
+
+                    cloneData[elementId] = data;
+
+                    CloneChanged(this, new CloneChangedEventArgs(cloneId, elementId, data, isSimilar, sourceId));
                 }
                 else
                 {
-                    isSimilar = false;
+                    throw new SnifferException($"Clone {cloneId} not found");
                 }
-
-                cloneData[elementId] = data;
-
-                CloneChanged(this, new CloneChangedEventArgs(cloneId, elementId, data, isSimilar, sourceId));
-            }
-            else
-            {
-                throw new SnifferException($"Clone {cloneId} not found");
             }
         }
 
@@ -93,9 +110,12 @@ namespace BlitzSniffer.Network.Netcode.Clone
 
         public void Reset()
         {
-            foreach (uint cloneId in Clones.Keys)
+            lock (OperationLock)
             {
-                Clones[cloneId] = new Dictionary<uint, byte[]>();
+                foreach (uint cloneId in Clones.Keys)
+                {
+                    Clones[cloneId] = new Dictionary<uint, byte[]>();
+                }
             }
         }
 
