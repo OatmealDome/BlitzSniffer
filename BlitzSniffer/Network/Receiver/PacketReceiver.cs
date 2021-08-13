@@ -16,6 +16,12 @@ namespace BlitzSniffer.Network.Receiver
             set;
         }
 
+        public PosixTimeval LastReceivedTimeval
+        {
+            get;
+            private set;
+        }
+
         protected PacketReceiver()
         {
 
@@ -44,6 +50,8 @@ namespace BlitzSniffer.Network.Receiver
 
         protected virtual void OnPacketArrival(object sender, CaptureEventArgs e)
         {
+            LastReceivedTimeval = e.Packet.Timeval;
+
             NetworkManager.Instance.HandlePacketReceivedFromHandler(e);
         }
 
