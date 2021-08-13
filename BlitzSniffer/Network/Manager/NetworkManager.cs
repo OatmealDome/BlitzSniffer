@@ -217,9 +217,11 @@ namespace BlitzSniffer.Network.Manager
             }
             while (targetTimeval < equivalentTimeval);
 
-            realTimeReceiver.Seek(equivalentTimeval);
-
             device.Close();
+
+            // Re-create the receiver
+            Receiver.Dispose();
+            Receiver = new RealTimeReplayPacketReceiver(CaptureFile, targetTimeval);
 
             if (VideoSync != null)
             {
@@ -239,8 +241,8 @@ namespace BlitzSniffer.Network.Manager
 
             CloneHolder.Instance.Reset();
 
-            // Restart the receiver
-            realTimeReceiver.Start();
+            // Start the new receiver
+            Receiver.Start();
         }
 
         public PosixTimeval GetFirstPacketTimeReplay()
