@@ -218,16 +218,16 @@ namespace BlitzSniffer.Network.Manager
             }
             while (targetTimeval < equivalentTimeval);
 
+            if (VideoSync != null)
+            {
+                VideoSync.Seek(equivalentTimeval, device);
+            }
+
             device.Close();
 
             // Re-create the receiver
             Receiver.Dispose();
             Receiver = new RealTimeReplayPacketReceiver(CaptureFile, targetTimeval);
-
-            if (VideoSync != null)
-            {
-                VideoSync.Seek(equivalentTimeval, device);
-            }
 
             // Reset game netcode handlers
             if (Session != null)
