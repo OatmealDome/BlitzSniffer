@@ -39,6 +39,8 @@ namespace BlitzSniffer.Network.Manager
         private LiveWriteOut WriteOut;
         private VideoSynchronizer VideoSync;
 
+        private string CaptureFile;
+
         private bool Started;
 
         public delegate void PacketReceivedHandler(object sender, PacketReceivedEventArgs args);
@@ -140,16 +142,22 @@ namespace BlitzSniffer.Network.Manager
         public void LoadLive(PiaSessionType type, ICaptureDevice device, string liveOutFile)
         {
             Load(type, new LivePacketReceiver(device), liveOutFile: liveOutFile);
+
+            CaptureFile = null;
         }
 
         public void LoadReplay(PiaSessionType type, string file)
         {
             Load(type, new ReplayPacketReceiver(file), true);
+
+            CaptureFile = file;
         }
 
         public void LoadRealTimeReplay(PiaSessionType type, string file, ulong offset = 0)
         {
             Load(type, new RealTimeReplayPacketReceiver(file, offset), true);
+
+            CaptureFile = file;
         }
 
         public void LoadRealTimeVideoSynchronizedReplay(PiaSessionType type, string file, ulong offset = 0)
@@ -162,6 +170,8 @@ namespace BlitzSniffer.Network.Manager
             VideoSync = new VideoSynchronizer(replayConfig);
 
             VideoSync.Seek(GetFirstPacketTimeReplay(), receiver.GetTemporaryReplayDevice());
+
+            CaptureFile = replayConfig.CaptureFile;
         }
 
         // Controls
