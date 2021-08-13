@@ -109,6 +109,14 @@ namespace BlitzSniffer.Network.Receiver
             }
         }
 
+        public void SeekForwards(PosixTimeval timeval)
+        {
+            lock (TimevalLock)
+            {
+                Timeval = timeval;
+            }
+        }
+
         protected override void OnPacketArrival(object sender, CaptureEventArgs e)
         {
             PosixTimeval packetTimeval = e.Packet.Timeval;
