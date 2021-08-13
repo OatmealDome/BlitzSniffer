@@ -1,4 +1,4 @@
-using BlitzSniffer.Network.Searcher;
+﻿using BlitzSniffer.Network.Searcher;
 using BlitzSniffer.Util;
 using NintendoNetcode.Pia;
 using SharpPcap;
@@ -48,27 +48,19 @@ namespace BlitzSniffer.Network.Receiver
         }
 
         private object TimevalLock = new object();
-        private object ProcessingLock = new object();
 
-        public RealTimeReplayPacketReceiver(string path, ulong microsecondsOffset) : base(path)
+        public RealTimeReplayPacketReceiver(string path, ulong microsecondsOffset) : this(path)
         {
-            ReplayPath = path;
-
-            SetObjects();
-            
             lock (TimevalLock)
             {
                 Timeval = FirstPacketTimeval.Add(microsecondsOffset);
             }
         }
 
-        public RealTimeReplayPacketReceiver(string path) : this(path, 0)
+        private RealTimeReplayPacketReceiver(string path) : base(path)
         {
+            ReplayPath = path;
 
-        }
-
-        private void SetObjects()
-        {
             WaitForTimeval = null;
             ContinueSignal = new ManualResetEvent(false);
             TokenSource = new CancellationTokenSource();
@@ -94,26 +86,6 @@ namespace BlitzSniffer.Network.Receiver
             }
 
             TokenSource.Cancel();
-        }
-
-        public void Seek(PosixTimeval timeval)
-        {
-            lock (ProcessingLock)
-            {
-                // Dispose everything
-                Dispose();
-
-                // And then recreate everything again
-                lock (TimevalLock)
-                {
-                    Timeval = timeval;
-                }
-
-                SetObjects();
-
-                Device = new CaptureFileReaderDevice(ReplayPath);
-                Device.Open();
-            }
         }
 
         public ICaptureDevice GetTemporaryReplayDevice()
@@ -144,43 +116,40 @@ namespace BlitzSniffer.Network.Receiver
 
         protected override void OnPacketArrival(object sender, CaptureEventArgs e)
         {
-            lock (ProcessingLock)
+            PosixTimeval packetTimeval = e.Packet.Timeval;
+
+            bool shouldWait = false;
+
+            if (packetTimeval > Timeval)
             {
-                PosixTimeval packetTimeval = e.Packet.Timeval;
+                shouldWait = true;
 
-                bool shouldWait = false;
-
-                if (packetTimeval > Timeval)
+                lock (TimevalLock)
                 {
-                    shouldWait = true;
-
-                    lock (TimevalLock)
-                    {
-                        WaitForTimeval = packetTimeval;
-                    }
+                    WaitForTimeval = packetTimeval;
                 }
-
-                if (shouldWait)
-                {
-                    try
-                    {
-                        WaitHandle.WaitAny(new WaitHandle[] { TokenSource.Token.WaitHandle, ContinueSignal });
-                    }
-                    catch (ObjectDisposedException)
-                    {
-                        ;
-                    }
-
-                    lock (TimevalLock)
-                    {
-                        WaitForTimeval = null;
-
-                        ContinueSignal.Reset();
-                    }
-                }
-
-                base.OnPacketArrival(sender, e);
             }
+
+            if (shouldWait)
+            {
+                try
+                {
+                    WaitHandle.WaitAny(new WaitHandle[] { TokenSource.Token.WaitHandle, ContinueSignal });
+                }
+                catch (ObjectDisposedException)
+                {
+                    ;
+                }
+
+                lock (TimevalLock)
+                {
+                    WaitForTimeval = null;
+
+                    ContinueSignal.Reset();
+                }
+            }
+
+            base.OnPacketArrival(sender, e);
         }
 
     }
