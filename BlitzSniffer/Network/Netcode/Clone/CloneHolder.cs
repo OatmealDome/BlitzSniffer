@@ -112,7 +112,7 @@ namespace BlitzSniffer.Network.Netcode.Clone
         {
             lock (OperationLock)
             {
-                foreach (uint cloneId in Clones.Keys)
+                foreach (uint cloneId in Clones.Keys.ToList())
                 {
                     Clones[cloneId] = new Dictionary<uint, byte[]>();
                 }
