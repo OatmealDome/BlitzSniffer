@@ -20,7 +20,7 @@ namespace BlitzSniffer.Network.Netcode.Clone
             }
         }
 
-        public Dictionary<uint, Dictionary<uint, byte[]>> Clones
+        private Dictionary<uint, Dictionary<uint, byte[]>> Clones
         {
             get;
             set;
