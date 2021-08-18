@@ -15,6 +15,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using BlitzSniffer.Game.Tracker.Versus.VClam;
+using BlitzSniffer.Game.Event.Player.VClam;
 
 namespace BlitzSniffer.Game.Tracker.Player
 {
@@ -252,6 +254,21 @@ namespace BlitzSniffer.Game.Tracker.Player
                             player.HasGachihoko = false;
 
                             EventTracker.Instance.AddEvent(new PlayerLostGachihokoEvent()
+                            {
+                                PlayerIdx = playerId
+                            });
+                        }
+                        else if (player.Clams != 0)
+                        {
+                            EventTracker.Instance.AddEvent(new PlayerClamNormalCountUpdateEvent()
+                            {
+                                PlayerIdx = playerId,
+                                Clams = 0
+                            });
+                        }
+                        else if (player.HasGoldenClam)
+                        {
+                            EventTracker.Instance.AddEvent(new PlayerClamGoldenLostEvent()
                             {
                                 PlayerIdx = playerId
                             });
