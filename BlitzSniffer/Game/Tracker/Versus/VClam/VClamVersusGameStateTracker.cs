@@ -1,4 +1,7 @@
 using Blitz.Cmn.Def;
+using BlitzSniffer.Game.Event;
+using BlitzSniffer.Game.Event.Player.VClam;
+using BlitzSniffer.Game.Tracker.Player;
 using BlitzSniffer.Network.Netcode.Clone;
 using Nintendo.Sead;
 using Syroot.BinaryData;
@@ -26,11 +29,19 @@ namespace BlitzSniffer.Game.Tracker.Versus.VClam
             BravoBasket.OppositeBasket = AlphaBasket;
 
             CloneHolder holder = CloneHolder.Instance;
+
             holder.RegisterClone(134);
 
+            for (uint i = 0; i < 10; i++)
+            {
+                holder.RegisterClone(135 + i);
+            }
+
             GameSession session = GameSession.Instance;
+            session.InGameCloneChanged += HandleTake;
             session.InGameCloneChanged += HandleBasketBreak;
             session.InGameCloneChanged += HandleBasketRepair;
+            session.InGameCloneChanged += HandleReserveThrow;
             session.InGameCloneChanged += HandleScoreEvent;
 
         }
@@ -41,8 +52,10 @@ namespace BlitzSniffer.Game.Tracker.Versus.VClam
             BravoBasket.Dispose();
 
             GameSession session = GameSession.Instance;
+            session.InGameCloneChanged -= HandleTake;
             session.InGameCloneChanged -= HandleBasketBreak;
             session.InGameCloneChanged -= HandleBasketRepair;
+            session.InGameCloneChanged -= HandleReserveThrow;
             session.InGameCloneChanged -= HandleScoreEvent;
         }
 
@@ -56,7 +69,108 @@ namespace BlitzSniffer.Game.Tracker.Versus.VClam
          * ReserveThrow
          * Sleep
          * Score
+         * 
+         * Player:
+         * 
+         * Lost
+         * TakeReq
+         * CreateGolden
+         * Bank
          */
+
+        public void HandleTake(object sender, CloneChangedEventArgs args)
+        {
+            if (args.CloneId != 134)
+            {
+                return;
+            }
+
+            if (args.ElementId != 1)
+            {
+                return;
+            }
+
+            using (MemoryStream stream = new MemoryStream(args.Data))
+            using (BinaryDataReader reader = new BinaryDataReader(stream))
+            {
+                reader.ByteOrder = ByteOrder.LittleEndian;
+
+                uint netActorClamId = reader.ReadUInt32();
+                uint playerId = reader.ReadByte();
+                byte isGolden = reader.ReadByte();
+                
+                Player.Player player = GameSession.Instance.PlayerTracker.GetPlayer(playerId);
+
+                if (isGolden == 0)
+                {
+                    player.Clams++;
+                }
+
+                if (isGolden != 0 || player.Clams == 10)
+                {
+                    player.Clams = 0;
+                    player.HasGoldenClam = true;
+                    
+                    EventTracker.Instance.AddEvent(new PlayerClamGoldenTakeEvent()
+                    {
+                        PlayerIdx = playerId
+                    });
+                }
+                else
+                {
+                    EventTracker.Instance.AddEvent(new PlayerClamNormalCountUpdateEvent()
+                    {
+                        PlayerIdx = playerId,
+                        Clams = player.Clams
+                    });
+                }
+            }
+        }
+
+        public void HandleReserveThrow(object sender, CloneChangedEventArgs args)
+        {
+            if (args.CloneId != 134)
+            {
+                return;
+            }
+
+            if (args.ElementId != 6)
+            {
+                return;
+            }
+
+            using (MemoryStream stream = new MemoryStream(args.Data))
+            using (BinaryDataReader reader = new BinaryDataReader(stream))
+            {
+                reader.ByteOrder = ByteOrder.LittleEndian;
+
+                uint clamIdx = reader.ReadUInt16(); // maybe
+                byte playerId = reader.ReadByte();
+                byte isGolden = reader.ReadByte();
+                
+                Player.Player player = GameSession.Instance.PlayerTracker.GetPlayer(playerId);
+
+                if (isGolden == 0)
+                {
+                    player.Clams--;
+                    
+                    EventTracker.Instance.AddEvent(new PlayerClamNormalCountUpdateEvent()
+                    {
+                        PlayerIdx = playerId,
+                        Clams = player.Clams
+                    });
+                }
+                else
+                {
+                    player.HasGoldenClam = false;
+                    
+                    EventTracker.Instance.AddEvent(new PlayerClamGoldenLostEvent()
+                    {
+                        PlayerIdx = playerId
+                    });
+                }
+            }
+        }
 
         private void HandleBasketBreak(object sender, CloneChangedEventArgs args)
         {
