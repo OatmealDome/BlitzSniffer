@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
+using NintendoNetcode.Pia.Clone.Content;
+using NintendoNetcode.Pia.Clone.Element.Data;
+using NintendoNetcode.Pia.Clone.Element.Data.Event;
+using NintendoNetcode.Pia.Clone.Element.Data.Reliable;
+using NintendoNetcode.Pia.Clone.Element.Data.Unreliable;
 
 namespace BlitzSniffer.Network.Netcode.Clone
 {
@@ -41,25 +46,14 @@ namespace BlitzSniffer.Network.Netcode.Clone
 
         public void RegisterClone(uint id)
         {
-            // There is potential for a race condition here, but all operations that access RegisterClone
-            // and IsCloneRegistered all occur on the same thread, so it shouldn't be an issue for now.
-
-            if (IsCloneRegistered(id))
-            {
-                return;
-            }
-
             lock (OperationLock)
             {
+                if (Clones.ContainsKey(id))
+                {
+                    return;
+                }
+                
                 Clones[id] = new Dictionary<uint, byte[]>();
-            }
-        }
-
-        public bool IsCloneRegistered(uint id)
-        {
-            lock (OperationLock)
-            {
-                return Clones.ContainsKey(id);
             }
         }
 
@@ -72,38 +66,82 @@ namespace BlitzSniffer.Network.Netcode.Clone
                     return cloneData;
                 }
             }
-
+            
             throw new SnifferException($"Clone {id} not found");
         }
 
-        public void UpdateElementInClone(uint cloneId, uint elementId, byte[] data, ulong sourceId)
+        public void UpdateWithContentData(CloneContentData contentData, ulong sourceId)
         {
             lock (OperationLock)
             {
-                if (Clones.TryGetValue(cloneId, out Dictionary<uint, byte[]> cloneData))
+                if (!Clones.ContainsKey(contentData.CloneId))
                 {
-                    bool isSimilar;
-                    if (cloneData.TryGetValue(elementId, out byte[] elementData))
-                    {
-                        isSimilar = elementData.SequenceEqual(data);
-                    }
-                    else
-                    {
-                        isSimilar = false;
-                    }
-
-                    cloneData[elementId] = data;
-
-                    CloneChanged(this, new CloneChangedEventArgs(cloneId, elementId, data, isSimilar, sourceId));
+                    return;
                 }
-                else
+                
+                foreach (CloneElementData elementData in contentData.ElementData)
                 {
-                    throw new SnifferException($"Clone {cloneId} not found");
+                    switch (elementData)
+                    {
+                        case CloneElementDataEventData eventData:
+                            UpdateElementByEventData(contentData.CloneId, sourceId, eventData);
+                            break;
+                        case CloneElementDataReliableData reliableData:
+                            UpdateElementByReliableData(contentData.CloneId, sourceId, reliableData);
+                            break;
+                        case CloneElementDataUnreliable unreliableData:
+                            UpdateElementByUnreliableData(contentData.CloneId, sourceId, unreliableData);
+                            break;
+                        default:
+                            continue;
+                    }
                 }
             }
         }
 
-        public void UpdateCloneClock(uint clock)
+        private void UpdateElementByEventData(uint cloneId, ulong sourceId, CloneElementDataEventData data)
+        {
+            UpdateElement(cloneId, data.Id, data.Data, sourceId);
+            UpdateCloneClock(data.Clock);
+        }
+        
+        private void UpdateElementByReliableData(uint cloneId, ulong sourceId, CloneElementDataReliableData data)
+        {
+            UpdateElement(cloneId, data.Id, data.Data, sourceId);
+            UpdateCloneClock(data.Clock);
+        }
+        
+        private void UpdateElementByUnreliableData(uint cloneId, ulong sourceId, CloneElementDataUnreliable data)
+        {
+            UpdateElement(cloneId, data.Id, data.Data, sourceId);
+            UpdateCloneClock(data.Clock);
+        }
+        
+        private void UpdateElement(uint cloneId, uint elementId, byte[] data, ulong sourceId)
+        {
+            if (Clones.TryGetValue(cloneId, out Dictionary<uint, byte[]> cloneData))
+            {
+                bool isSimilar;
+                if (cloneData.TryGetValue(elementId, out byte[] elementData))
+                {
+                    isSimilar = elementData.SequenceEqual(data);
+                }
+                else
+                {
+                    isSimilar = false;
+                }
+
+                cloneData[elementId] = data;
+
+                CloneChanged(this, new CloneChangedEventArgs(cloneId, elementId, data, isSimilar, sourceId));
+            }
+            else
+            {
+                throw new SnifferException($"Clone {cloneId} not found");
+            }
+        }
+
+        private void UpdateCloneClock(uint clock)
         {
             ClockChanged(this, new ClockChangedEventArgs(clock));
         }

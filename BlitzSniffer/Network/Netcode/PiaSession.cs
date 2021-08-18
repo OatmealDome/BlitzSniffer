@@ -133,39 +133,9 @@ namespace BlitzSniffer.Network.Netcode
         {
             CloneContentData cloneContentData = cloneMessage.Content as CloneContentData;
 
-            if (cloneContentData == null || !CloneHolder.Instance.IsCloneRegistered(cloneContentData.CloneId))
+            if (cloneContentData != null)
             {
-                return;
-            }
-
-            foreach (CloneElementData cloneElementData in cloneContentData.ElementData)
-            {
-                byte[] data;
-                uint clock;
-
-                switch (cloneElementData)
-                {
-                    case CloneElementDataEventData eventData:
-                        data = eventData.Data;
-                        clock = eventData.Clock;
-
-                        break;
-                    case CloneElementDataReliableData reliableData:
-                        data = reliableData.Data;
-                        clock = reliableData.Clock;
-                        
-                        break;
-                    case CloneElementDataUnreliable unreliableData:
-                        data = unreliableData.Data;
-                        clock = unreliableData.Clock;
-                        
-                        break;
-                    default:
-                        continue;
-                }
-
-                CloneHolder.Instance.UpdateCloneClock(clock);
-                CloneHolder.Instance.UpdateElementInClone(cloneContentData.CloneId, cloneElementData.Id, data, cloneMessage.SourceStationId);
+                CloneHolder.Instance.UpdateWithContentData(cloneContentData, cloneMessage.SourceStationId);
             }
         }
 
