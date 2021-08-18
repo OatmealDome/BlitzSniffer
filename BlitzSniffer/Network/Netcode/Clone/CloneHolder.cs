@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using BlitzSniffer.Util;
 using NintendoNetcode.Pia.Clone.Content;
 using NintendoNetcode.Pia.Clone.Element.Data;
 using NintendoNetcode.Pia.Clone.Element.Data.Event;
@@ -31,6 +32,8 @@ namespace BlitzSniffer.Network.Netcode.Clone
             set;
         }
 
+        private Dictionary<uint, Dictionary<uint, FixedSizedQueue<ushort>>> LastEventCloneIdx;
+
         public delegate void CloneChangedEventHandler(object sender, CloneChangedEventArgs args);
         public event CloneChangedEventHandler CloneChanged;
 
@@ -42,6 +45,7 @@ namespace BlitzSniffer.Network.Netcode.Clone
         private CloneHolder()
         {
             Clones = new Dictionary<uint, Dictionary<uint, byte[]>>();
+            LastEventCloneIdx = new Dictionary<uint, Dictionary<uint, FixedSizedQueue<ushort>>>();
         }
 
         public void RegisterClone(uint id)
@@ -54,6 +58,7 @@ namespace BlitzSniffer.Network.Netcode.Clone
                 }
                 
                 Clones[id] = new Dictionary<uint, byte[]>();
+                LastEventCloneIdx[id] = new Dictionary<uint, FixedSizedQueue<ushort>>();
             }
         }
 
@@ -101,6 +106,23 @@ namespace BlitzSniffer.Network.Netcode.Clone
 
         private void UpdateElementByEventData(uint cloneId, ulong sourceId, CloneElementDataEventData data)
         {
+            if (LastEventCloneIdx[cloneId].TryGetValue(data.Id, out FixedSizedQueue<ushort> indexQueue))
+            {
+                if (indexQueue.Contains(data.Index))
+                {
+                    return;
+                }
+                
+                indexQueue.Enqueue(data.Index);
+            }
+            else
+            {
+                FixedSizedQueue<ushort> newQueue = new FixedSizedQueue<ushort>(10);
+                newQueue.Enqueue(data.Index);
+
+                LastEventCloneIdx[cloneId][data.Id] = newQueue;
+            }
+
             UpdateElement(cloneId, data.Id, data.Data, sourceId);
             UpdateCloneClock(data.Clock);
         }
@@ -153,6 +175,7 @@ namespace BlitzSniffer.Network.Netcode.Clone
                 foreach (uint cloneId in Clones.Keys.ToList())
                 {
                     Clones[cloneId] = new Dictionary<uint, byte[]>();
+                    LastEventCloneIdx[cloneId] = new Dictionary<uint, FixedSizedQueue<ushort>>();
                 }
             }
         }
