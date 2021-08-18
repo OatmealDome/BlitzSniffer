@@ -107,6 +107,18 @@ namespace BlitzSniffer.Game.Tracker.Player
             set;
         }
 
+        public uint Clams
+        {
+            get;
+            set;
+        }
+
+        public bool HasGoldenClam
+        {
+            get;
+            set;
+        }
+
         public PlayerSignal? LastSignalType
         {
             get;
@@ -134,6 +146,8 @@ namespace BlitzSniffer.Game.Tracker.Player
             Assists = 0;
             HasGachihoko = false;
             IsOnVLift = false;
+            Clams = 0;
+            HasGoldenClam = false;
             LastSignalType = null;
             LastSignalExpirationTick = 0;
         }
