@@ -1,5 +1,6 @@
 ﻿using BlitzSniffer.Game.Event;
 using BlitzSniffer.Game.Event.Player;
+using BlitzSniffer.Game.Event.Player.VClam;
 using BlitzSniffer.Game.Event.Setup;
 using BlitzSniffer.Game.Event.Setup.Player;
 using System.Collections.Generic;
@@ -165,6 +166,18 @@ namespace BlitzSniffer.TextInterface.Overview.Player
             gaugeLabel.Text = $"   SP   ACT";
         }
 
+        private void SetPlayerClamCount(int idx, uint count)
+        {
+            Label modeLabel = ModeStatusLabels[idx];
+            modeLabel.Text = $"   CLAM  {count}";
+        }
+
+        private void SetPlayerClamGolden(int idx)
+        {
+            Label modeLabel = ModeStatusLabels[idx];
+            modeLabel.Text = "   CLAM POW"; 
+        }
+
         private void HandleGameEvent(object sender, SendEventArgs args)
         {
             switch (args.GameEvent)
@@ -252,6 +265,33 @@ namespace BlitzSniffer.TextInterface.Overview.Player
                     {
                         PlayerIsInSpecial[activateUid] = true;
                         SetPlayerInSpecial(activateUid);
+                    });
+
+                    break;
+                case PlayerClamNormalCountUpdateEvent clamCountEvent:
+                    int clamCountUid = PidToUiId[clamCountEvent.PlayerIdx];
+
+                    Application.MainLoop?.Invoke(() =>
+                    {
+                        SetPlayerClamCount(clamCountUid, clamCountEvent.Clams);
+                    });
+
+                    break;
+                case PlayerClamGoldenTakeEvent goldenTakeEvent:
+                    int goldenTakeUid = PidToUiId[goldenTakeEvent.PlayerIdx];
+                    
+                    Application.MainLoop?.Invoke(() =>
+                    {
+                        SetPlayerClamGolden(goldenTakeUid);
+                    });
+
+                    break;
+                case PlayerClamGoldenLostEvent goldenLostEvent:
+                    int goldenLostUid = PidToUiId[goldenLostEvent.PlayerIdx];
+                    
+                    Application.MainLoop?.Invoke(() =>
+                    {
+                        SetPlayerClamCount(goldenLostUid, 0);
                     });
 
                     break;
