@@ -1,5 +1,6 @@
 ﻿using BlitzSniffer.Game.Event;
 using BlitzSniffer.Game.Event.Player;
+using BlitzSniffer.Game.Event.Player.VClam;
 using BlitzSniffer.Game.Event.Player.VGoal;
 using BlitzSniffer.Game.Event.Player.VLift;
 using BlitzSniffer.Game.Event.Versus;
@@ -108,6 +109,14 @@ namespace BlitzSniffer
                     LogContext.Information("PlayerLeftVLift: {Name} is no longer riding the Tower", GameSession.Instance.PlayerTracker.GetPlayer(leftEvent.PlayerIdx).Name);
 
                     break;
+                case PlayerClamGoldenTakeEvent goldenTakeEvent:
+                    LogContext.Information("PlayerClamGoldenTake: {Name} now has a Power Clam", GameSession.Instance.PlayerTracker.GetPlayer(goldenTakeEvent.PlayerIdx).Name);
+
+                    break;
+                case PlayerClamGoldenLostEvent goldenLostEvent:
+                    LogContext.Information("PlayerClamGoldenLost: {Name} lost their Power Clam", GameSession.Instance.PlayerTracker.GetPlayer(goldenLostEvent.PlayerIdx).Name);
+
+                    break;
                 case PlayerCoopRescuedEvent coopRescuedEvent:
                     PlayerTracker coopRescuePlayerTracker = GameSession.Instance.PlayerTracker;
                     Player coopVictimPlayer = coopRescuePlayerTracker.GetPlayer(coopRescuedEvent.PlayerIdx);
@@ -198,6 +207,7 @@ namespace BlitzSniffer
                     LogContext.Information("VClamBasketVulnerabilityUpdate: {Team}'s basket is now {BasketState}", basketVulnUpdateEvent.Team, basketVulnUpdateEvent.IsInvincible ? "invincible" : "vulnerable");
 
                     break;
+                case PlayerClamNormalCountUpdateEvent clamCountEvent:
                 case PlayerGaugeUpdateEvent gaugeEvent:
                     break;
                 default:
