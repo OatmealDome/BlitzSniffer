@@ -38,10 +38,10 @@ namespace BlitzSniffer.Game.Tracker.Versus.VClam
             }
 
             GameSession session = GameSession.Instance;
-            session.InGameCloneChanged += HandleTake;
+            //session.InGameCloneChanged += HandleTake;
             session.InGameCloneChanged += HandleBasketBreak;
             session.InGameCloneChanged += HandleBasketRepair;
-            session.InGameCloneChanged += HandleReserveThrow;
+            //session.InGameCloneChanged += HandleReserveThrow;
             session.InGameCloneChanged += HandleScoreEvent;
 
         }
@@ -52,10 +52,10 @@ namespace BlitzSniffer.Game.Tracker.Versus.VClam
             BravoBasket.Dispose();
 
             GameSession session = GameSession.Instance;
-            session.InGameCloneChanged -= HandleTake;
+            //session.InGameCloneChanged -= HandleTake;
             session.InGameCloneChanged -= HandleBasketBreak;
             session.InGameCloneChanged -= HandleBasketRepair;
-            session.InGameCloneChanged -= HandleReserveThrow;
+            //session.InGameCloneChanged -= HandleReserveThrow;
             session.InGameCloneChanged -= HandleScoreEvent;
         }
 
@@ -78,7 +78,7 @@ namespace BlitzSniffer.Game.Tracker.Versus.VClam
          * Bank
          */
 
-        public void HandleTake(object sender, CloneChangedEventArgs args)
+        /*public void HandleTake(object sender, CloneChangedEventArgs args)
         {
             if (args.CloneId != 134)
             {
@@ -97,7 +97,7 @@ namespace BlitzSniffer.Game.Tracker.Versus.VClam
 
                 uint netActorClamId = reader.ReadUInt32();
                 uint playerId = reader.ReadByte();
-                byte isGolden = reader.ReadByte();
+                byte isGolden = reader.ReadByte(); // not really
                 
                 Player.Player player = GameSession.Instance.PlayerTracker.GetPlayer(playerId);
 
@@ -146,7 +146,7 @@ namespace BlitzSniffer.Game.Tracker.Versus.VClam
 
                 uint clamIdx = reader.ReadUInt16(); // maybe
                 byte playerId = reader.ReadByte();
-                byte isGolden = reader.ReadByte();
+                byte isGolden = reader.ReadByte(); // this is sleep count
                 
                 Player.Player player = GameSession.Instance.PlayerTracker.GetPlayer(playerId);
 
@@ -170,7 +170,7 @@ namespace BlitzSniffer.Game.Tracker.Versus.VClam
                     });
                 }
             }
-        }
+        }*/
 
         private void HandleBasketBreak(object sender, CloneChangedEventArgs args)
         {
