@@ -42,6 +42,11 @@ namespace BlitzSniffer.TextInterface.Status
 
         private void HandleBarClicked(MouseEventArgs args)
         {
+            if (!NetworkManager.Instance.IsRealTimeReplayLoaded())
+            {
+                return;
+            }
+
             if (args.MouseEvent.Flags != MouseFlags.Button1Released)
             {
                 return;
