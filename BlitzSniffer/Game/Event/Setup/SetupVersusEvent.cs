@@ -34,6 +34,13 @@ namespace BlitzSniffer.Game.Event.Setup
             }
         }
 
+        public uint TotalGameTicks
+        {
+            get;
+            set;
+        }
+        
+
         public SetupVersusEvent()
         {
             VersusGameStateTracker stateTracker = GameSession.Instance.GameStateTracker as VersusGameStateTracker;
@@ -52,6 +59,17 @@ namespace BlitzSniffer.Game.Event.Setup
                     RuleConfiguration = new SetupGenericRuleConfiguration();
                     break;
             }
+            
+            // minutes * 60 seconds/minute * 60 ticks/second
+            if (_Rule == VersusRule.Pnt)
+            {
+                TotalGameTicks = 3 * 60 * 60;
+            }
+            else
+            {
+                TotalGameTicks = 5 * 60 * 60;
+            }
+            
         }
 
         protected override SetupPlayer GetSetupPlayer(uint playerId, Tracker.Player.Player player)
