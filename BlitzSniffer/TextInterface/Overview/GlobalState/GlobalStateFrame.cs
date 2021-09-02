@@ -142,13 +142,9 @@ namespace BlitzSniffer.TextInterface.Overview.GlobalState
                     Application.MainLoop?.Invoke(() =>
                     {
                         // TOOD: Coop
-                        if (setupEvent.Rule != "Paint")
+                        if (setupEvent is SetupVersusEvent versusEvent)
                         {
-                            TotalTicks = 5 * 60 * 60; // 5 mins * 60 secs/min * 60 ticks/sec
-                        }
-                        else
-                        {
-                            TotalTicks = 3 * 60 * 60; // 3 mins * 60 secs/min * 60 ticks/sec
+                            TotalTicks = versusEvent.TotalGameTicks;
                         }
 
                         ChangeState(MatchState.IntroDemo);
