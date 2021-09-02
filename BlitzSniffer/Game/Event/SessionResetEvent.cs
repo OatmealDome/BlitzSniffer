@@ -1,6 +1,6 @@
 ﻿namespace BlitzSniffer.Game.Event
 {
-    class SessionResetEvent : GameEvent
+    class SessionResetEvent : SnifferEvent
     {
         public override string Name => "SessionReset";
 
