@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace BlitzSniffer.Game.Event.Setup
 {
-    public abstract class SetupEvent : GameEvent
+    public abstract class SetupEvent : SnifferEvent
     {
         public override string Name => "Setup";
 
