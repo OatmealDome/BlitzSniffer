@@ -28,7 +28,7 @@ namespace BlitzSniffer
 
         static void PrintEventToConsole(object sender, SendEventArgs args)
         {
-            switch (args.GameEvent)
+            switch (args.Event)
             {
                 case PlayerDeathEvent deathEvent:
                     PlayerTracker tracker = GameSession.Instance.PlayerTracker;
@@ -211,12 +211,12 @@ namespace BlitzSniffer
                 case PlayerGaugeUpdateEvent gaugeEvent:
                     break;
                 default:
-                    string json = JsonSerializer.Serialize(args.GameEvent, args.GameEvent.GetType(), new JsonSerializerOptions()
+                    string json = JsonSerializer.Serialize(args.Event, args.Event.GetType(), new JsonSerializerOptions()
                     {
                         WriteIndented = true
                     });
 
-                    string linePrefix = args.GameEvent.Name + ": {Json}";
+                    string linePrefix = args.Event.Name + ": {Json}";
                     LogContext.Information(linePrefix, json);
 
                     break;

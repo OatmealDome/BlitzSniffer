@@ -136,7 +136,7 @@ namespace BlitzSniffer.TextInterface.Overview.GlobalState
 
         private void HandleGameEvent(object sender, SendEventArgs args)
         {
-            switch (args.GameEvent)
+            switch (args.Event)
             {
                 case SetupEvent setupEvent:
                     Application.MainLoop?.Invoke(() =>

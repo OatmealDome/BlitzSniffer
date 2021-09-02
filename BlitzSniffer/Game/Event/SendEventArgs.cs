@@ -4,15 +4,15 @@ namespace BlitzSniffer.Game.Event
 {
     public class SendEventArgs : EventArgs
     {
-        public GameEvent GameEvent
+        public SnifferEvent Event
         {
             get;
             private set;
         }
 
-        public SendEventArgs(GameEvent gameEvent)
+        public SendEventArgs(SnifferEvent snifferEvent)
         {
-            GameEvent = gameEvent;
+            Event = snifferEvent;
         }
 
     }

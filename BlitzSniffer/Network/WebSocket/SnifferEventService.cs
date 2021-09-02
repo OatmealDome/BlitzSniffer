@@ -36,7 +36,7 @@ namespace BlitzSniffer.Network.WebSocket
 
         private void BroadcastEvent(object sender, SendEventArgs args)
         {
-            string json = JsonSerializer.Serialize(args.GameEvent, args.GameEvent.GetType(), new JsonSerializerOptions()
+            string json = JsonSerializer.Serialize(args.Event, args.Event.GetType(), new JsonSerializerOptions()
             {
                 WriteIndented = true
             });
