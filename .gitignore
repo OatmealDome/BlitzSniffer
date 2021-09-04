@@ -361,3 +361,6 @@ FodyWeavers.xsd
 
 # Launch settings
 **/launchSettings.json
+
+# JetBrains Rider
+.idea
