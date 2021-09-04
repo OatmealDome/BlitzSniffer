@@ -108,12 +108,17 @@ namespace BlitzSniffer.Network.Netcode.Clone
         {
             if (LastEventCloneIdx[cloneId].TryGetValue(data.Id, out FixedSizedQueue<ushort> indexQueue))
             {
-                if (indexQueue.Contains(data.Index))
+                bool containsIndex = indexQueue.Contains(data.Index);
+                
+                if (containsIndex && data.Index != data.EraseIndex)
                 {
                     return;
                 }
-                
-                indexQueue.Enqueue(data.Index);
+
+                if (!containsIndex)
+                {
+                    indexQueue.Enqueue(data.Index);
+                }
             }
             else
             {
