@@ -30,8 +30,10 @@
     <PackageReference Include="SharpPcap" Version="5.1.0" />
     <PackageReference Include="System.CommandLine.DragonFruit" Version="0.3.0-alpha.20371.2" />
     <PackageReference Include="Terminal.Gui" Version="1.1.1" />
-    <PackageReference Include="VideoLAN.LibVLC.Mac" Version="3.1.3.1" />
-    <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.16" />
+    <!-- LibVLC takes up too much space, so exclude it temporarily. It's only really needed
+         for debugging purposes, anyway. -->
+    <!--<PackageReference Include="VideoLAN.LibVLC.Mac" Version="3.1.3.1" />
+    <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.16" />-->
     <PackageReference Include="WebSocketSharp-netstandard" Version="1.0.1" />
   </ItemGroup>
 
