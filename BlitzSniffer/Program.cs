@@ -37,7 +37,7 @@ namespace BlitzSniffer
         /// <param name="useRom">If a Splatoon 2 ROM should be used instead of the GameData file. This option has no effect in Release builds.</param>
         /// <param name="replayFile">A pcap file to replay.</param>
         /// <param name="replayInRealTime">If the replay file should be replayed in real-time.</param>
-        /// <param name="videoReplay">If this replay file is a video-synchronized replay configuration file.</param>
+        /// <param name="videoReplay">If the specified replay file is a configuration file for a video-synchronized replay.</param>
         /// <param name="realTimeStartOffset">When to fast-forward to in the replay file.</param>
         /// <param name="autoStartReplay">Whether to skip prompting the user to start the replay or not.</param>
         static void Main(bool consoleOnly = false, bool onlineSession = false, bool useRom = false, FileInfo replayFile = null, bool replayInRealTime = false, bool videoReplay = false, int realTimeStartOffset = 0, bool autoStartReplay = false)
