@@ -159,8 +159,16 @@ namespace BlitzSniffer
             localLogContext.Information("Copyright © 2020 - 2021 OatmealDome");
 
             // LibVLC initialization
-            Core.Initialize();
-
+            try
+            {
+                Core.Initialize();
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                localLogContext.Warning("Skipped VLC initialization.");
+#endif
+            }
 #if DEBUG
             if (useRom)
             {
