@@ -93,8 +93,7 @@ namespace BlitzSniffer.Util
             {
                 Key = SnifferConfig.Instance.Key,
                 ProductId = 8988,
-                Sign = true,
-                MachineCode = Helpers.GetMachineCodePI()
+                Sign = true
             });
 
             if (keyResult == null || keyResult.Result == ResultType.Error)
