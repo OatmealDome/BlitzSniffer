@@ -13,16 +13,8 @@ namespace BlitzSniffer.Network.Receiver
         {
             Device = device;
 
-            NpcapDevice npcapDevice = device as NpcapDevice;
-            if (npcapDevice != null)
-            {
-                npcapDevice.Open(OpenFlags.DataTransferUdp, ReadTimeout);
-            }
-            else
-            {
-                LibPcapLiveDevice libPcapDevice = device as LibPcapLiveDevice;
-                device.Open(DeviceMode.Promiscuous, ReadTimeout);
-            }
+            LibPcapLiveDevice libPcapDevice = device as LibPcapLiveDevice;
+            device.Open(DeviceMode.Promiscuous, ReadTimeout);
         }
 
         public override void Start()
