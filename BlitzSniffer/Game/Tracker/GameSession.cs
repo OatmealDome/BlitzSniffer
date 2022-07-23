@@ -221,11 +221,8 @@ namespace BlitzSniffer.Game.Tracker
 
                 ushort stage = reader.ReadUInt16();
 
-                // TODO verify these
                 reader.Seek(52, SeekOrigin.Begin);
                 Color4f alpha = new Color4f(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), 1.0f);
-
-                reader.Seek(72, SeekOrigin.Begin);
                 Color4f bravo = new Color4f(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), 1.0f);
 
                 if (!isCoop)
