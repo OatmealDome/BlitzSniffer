@@ -19,7 +19,7 @@ namespace BlitzSniffer.Game.Tracker.Versus.VClam
         private VClamBasket BravoBasket;
         private VClamBasket CurrentBrokenBasket;
 
-        public VClamVersusGameStateTracker(ushort stage, Color4f alpha, Color4f bravo) : base(stage, alpha, bravo)
+        public VClamVersusGameStateTracker(ushort stage, Color4f alpha, Color4f bravo, Color4f neutral) : base(stage, alpha, bravo, neutral)
         {
             AlphaBasket = new VClamBasket(Team.Alpha);
             BravoBasket = new VClamBasket(Team.Bravo);

@@ -7,18 +7,21 @@ using Nintendo.Sead;
 using Syroot.BinaryData;
 using System.Collections.Generic;
 using System.IO;
+using BlitzSniffer.Util;
+using Serilog;
 
 namespace BlitzSniffer.Game.Tracker.Versus.VLift
 {
     class VLiftVersusGameStateTracker : GachiVersusGameStateTracker
     {
+        private static readonly ILogger LogContext = LogUtil.GetLogger("VLift");
         public override VersusRule Rule => VersusRule.Vlf;
 
         public override bool HasPenalties => false;
 
         private VLiftRail Rail;
 
-        public VLiftVersusGameStateTracker(ushort stage, Color4f alpha, Color4f bravo) : base(stage, alpha, bravo)
+        public VLiftVersusGameStateTracker(ushort stage, Color4f alpha, Color4f bravo, Color4f neutral) : base(stage, alpha, bravo, neutral)
         {
             Rail = new VLiftRail();
 
@@ -107,7 +110,9 @@ namespace BlitzSniffer.Game.Tracker.Versus.VLift
             {
                 reader.ByteOrder = ByteOrder.LittleEndian;
 
-                reader.Seek(8);
+                //reader.Seek(8);
+                ulong data = reader.ReadUInt64();
+                LogContext.Information("data {Data}", data.ToString("x"));
 
                 uint ReadScore()
                 {

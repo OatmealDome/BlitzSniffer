@@ -30,12 +30,19 @@ namespace BlitzSniffer.Game.Tracker
             private set;
         }
 
-        public GameStateTracker(ushort stage, Color4f alpha, Color4f bravo)
+        public Color4f NeutralColor
+        {
+            get;
+            private set;
+        }
+
+        public GameStateTracker(ushort stage, Color4f alpha, Color4f bravo, Color4f neutral)
         {
             StageId = stage;
             StageLayout = StageResource.Instance.LoadStageForId((int)stage);
             AlphaColor = alpha;
             BravoColor = bravo;
+            NeutralColor = neutral;
         }
 
         public abstract void Dispose();

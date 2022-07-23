@@ -224,6 +224,7 @@ namespace BlitzSniffer.Game.Tracker
                 reader.Seek(52, SeekOrigin.Begin);
                 Color4f alpha = new Color4f(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), 1.0f);
                 Color4f bravo = new Color4f(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), 1.0f);
+                Color4f neutral = new Color4f(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), 1.0f);
 
                 if (!isCoop)
                 {
@@ -238,28 +239,28 @@ namespace BlitzSniffer.Game.Tracker
                     switch (rule)
                     {
                         case VersusRule.Pnt:
-                            GameStateTracker = new PaintVersusGameStateTracker(stage, alpha, bravo);
+                            GameStateTracker = new PaintVersusGameStateTracker(stage, alpha, bravo, neutral);
                             break;
                         case VersusRule.Vgl:
-                            GameStateTracker = new VGoalVersusGameStateTracker(stage, alpha, bravo);
+                            GameStateTracker = new VGoalVersusGameStateTracker(stage, alpha, bravo, neutral);
                             break;
                         case VersusRule.Var:
-                            GameStateTracker = new VAreaVersusGameStateTracker(stage, alpha, bravo);
+                            GameStateTracker = new VAreaVersusGameStateTracker(stage, alpha, bravo, neutral);
                             break;
                         case VersusRule.Vlf:
-                            GameStateTracker = new VLiftVersusGameStateTracker(stage, alpha, bravo);
+                            GameStateTracker = new VLiftVersusGameStateTracker(stage, alpha, bravo, neutral);
                             break;
                         case VersusRule.Vcl:
-                            GameStateTracker = new VClamVersusGameStateTracker(stage, alpha, bravo);
+                            GameStateTracker = new VClamVersusGameStateTracker(stage, alpha, bravo, neutral);
                             break;
                         default:
-                            GameStateTracker = new GenericVersusGameStateTracker(stage, rule, alpha, bravo);
+                            GameStateTracker = new GenericVersusGameStateTracker(stage, rule, alpha, bravo, neutral);
                             break;
                     }
                 }
                 else
                 {
-                    GameStateTracker = new CoopGameStateTracker(stage, alpha, bravo);
+                    GameStateTracker = new CoopGameStateTracker(stage, alpha, bravo, neutral);
                 }
             }
         }

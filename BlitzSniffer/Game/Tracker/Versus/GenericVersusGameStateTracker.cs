@@ -9,7 +9,7 @@ namespace BlitzSniffer.Game.Tracker.Versus
 
         public override VersusRule Rule => _Rule;
 
-        public GenericVersusGameStateTracker(ushort stage, VersusRule rule, Color4f alpha, Color4f bravo) : base(stage, alpha, bravo)
+        public GenericVersusGameStateTracker(ushort stage, VersusRule rule, Color4f alpha, Color4f bravo, Color4f neutral) : base(stage, alpha, bravo, neutral)
         {
             _Rule = rule;
         }

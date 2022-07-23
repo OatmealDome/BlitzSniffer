@@ -22,7 +22,7 @@ namespace BlitzSniffer.Game.Tracker.Versus.VArea
 
         private bool HasTrailingLostControlOfAreasInOvertime;
 
-        public VAreaVersusGameStateTracker(ushort stage, Color4f alpha, Color4f bravo) : base(stage, alpha, bravo)
+        public VAreaVersusGameStateTracker(ushort stage, Color4f alpha, Color4f bravo, Color4f neutral) : base(stage, alpha, bravo, neutral)
         {
             PaintTargetAreas = new List<VAreaPaintTargetArea>();
             HasTrailingLostControlOfAreasInOvertime = false;

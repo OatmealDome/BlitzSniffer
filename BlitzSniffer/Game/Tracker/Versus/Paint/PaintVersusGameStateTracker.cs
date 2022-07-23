@@ -18,7 +18,7 @@ namespace BlitzSniffer.Game.Tracker.Versus.Paint
 
         private Dictionary<uint, Tuple<uint, uint>> ResultTuples;
 
-        public PaintVersusGameStateTracker(ushort stage, Color4f alpha, Color4f bravo) : base(stage, alpha, bravo)
+        public PaintVersusGameStateTracker(ushort stage, Color4f alpha, Color4f bravo, Color4f neutral) : base(stage, alpha, bravo, neutral)
         {
             ResultTuples = new Dictionary<uint, Tuple<uint, uint>>();
 

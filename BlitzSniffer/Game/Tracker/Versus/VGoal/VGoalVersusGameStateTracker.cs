@@ -21,7 +21,7 @@ namespace BlitzSniffer.Game.Tracker.Versus.VGoal
         private uint GachihokoTimeout;
         private bool HasTimeoutEventFired;
 
-        public VGoalVersusGameStateTracker(ushort stage, Color4f alpha, Color4f bravo) : base(stage, alpha, bravo)
+        public VGoalVersusGameStateTracker(ushort stage, Color4f alpha, Color4f bravo, Color4f neutral) : base(stage, alpha, bravo, neutral)
         {
             GachihokoHasBarrier = true;
             GachihokoTimeout = 0;

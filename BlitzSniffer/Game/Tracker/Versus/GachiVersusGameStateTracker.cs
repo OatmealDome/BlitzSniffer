@@ -57,7 +57,7 @@ namespace BlitzSniffer.Game.Tracker.Versus
             private set;
         }
 
-        public GachiVersusGameStateTracker(ushort stage, Color4f alpha, Color4f bravo) : base(stage, alpha, bravo)
+        public GachiVersusGameStateTracker(ushort stage, Color4f alpha, Color4f bravo, Color4f neutral) : base(stage, alpha, bravo, neutral)
         {
             AlphaScore = 0;
             BravoScore = 0;
