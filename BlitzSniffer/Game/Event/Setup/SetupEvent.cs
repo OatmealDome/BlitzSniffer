@@ -52,7 +52,7 @@ namespace BlitzSniffer.Game.Event.Setup
         protected SetupEvent()
         {
             Teams = new List<SetupTeam>();
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 3; i++)
             {
                 Teams.Add(new SetupTeam());
             }
@@ -62,6 +62,7 @@ namespace BlitzSniffer.Game.Event.Setup
             StageId = StageResource.Instance.GetStageNameForId(stateTracker.StageId);
             Teams[0].Color = stateTracker.AlphaColor;
             Teams[1].Color = stateTracker.BravoColor;
+            Teams[2].Color = stateTracker.NeutralColor;
 
             for (uint i = 0; i != 10; i++)
             {
